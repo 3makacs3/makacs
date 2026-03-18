@@ -12,33 +12,53 @@
     height:100vh;
     background-color: #c2c8f6; /* háttér */
     overflow:hidden;
+    font-family: 'Baskerville eText', Times, serif;
   }
-  h1 {
+  h1, .menu-item {
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    font-family: 'Baskerville eText', Times, serif;
     font-size:10vw;
     color:#772469;
     margin:0;
+    cursor:pointer;
     z-index:1;
-    cursor:pointer; /* így látod, hogy kattintható */
+    text-align:center;
+  }
+  .menu-item {
+    font-size:8vw;
+    margin:40px 0;
   }
   canvas {
     position:absolute;
     top:0;
     left:0;
-    z-index:0; /* canvas a felirat alatt */
+    z-index:0;
   }
 </style>
 </head>
 <body>
   <h1 id="makacs">Makacs</h1>
+
+  <div id="menu" style="display:none; flex-direction: column;">
+    <h1 class="menu-item" onclick="alert('About Me clicked!')">About Me</h1>
+    <h1 class="menu-item" onclick="alert('My Art clicked!')">My Art</h1>
+    <h1 class="menu-item" onclick="alert('Contact clicked!')">Contact</h1>
+  </div>
+
   <script src="makacs.js"></script>
   <script>
+    // kattintás a feliratra, át a menübe
     document.getElementById('makacs').addEventListener('click', () => {
-      window.location.href = "menu.html"; // új oldalra visz
+      document.getElementById('makacs').style.display = 'none';
+      let menu = document.getElementById('menu');
+      menu.style.display = 'flex';
+      menu.style.position = 'absolute';
+      menu.style.top = '50%';
+      menu.style.left = '50%';
+      menu.style.transform = 'translate(-50%, -50%)';
+      menu.style.alignItems = 'center';
     });
   </script>
 </body>
