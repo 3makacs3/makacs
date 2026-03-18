@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Makacs Portfolio</title>
+  <title>Makacs</title>
   <!-- p5.js könyvtár -->
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.min.js"></script>
-  <!-- a te JavaScript fájlod -->
-  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
 </head>
 <body>
+  <!-- ide jön a canvas automatikusan -->
+  <script src="sketch.js"></script>
 </body>
 </html>
