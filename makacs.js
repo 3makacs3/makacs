@@ -1,14 +1,17 @@
 let state = "title";
 
-// képek
+// képek (ha nincsenek, null)
 let titleImg;
 let treeImgs = [];
 
 let trees = [
-  {x:0,y:0,label:"My Art", page:"art"},
-  {x:0,y:0,label:"About Me", page:"about"},
-  {x:0,y:0,label:"Contact", page:"contact"}
+  {x:0, y:0, label:"My Art", page:"art"},
+  {x:0, y:0, label:"About Me", page:"about"},
+  {x:0, y:0, label:"Contact", page:"contact"}
 ];
+
+let arrowPulse = 0;
+let pulseDir = 1;
 
 function preload(){
   titleImg = loadImage("images/makacs.png", ()=>{}, ()=>{titleImg=null});
@@ -19,25 +22,20 @@ function preload(){
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
-
-  // 🔥 HSB BEKAPCSOLÁSA (fontos!)
   colorMode(HSB, 360, 100, 100);
-
   textAlign(CENTER, CENTER);
 
   // fák pozíció
   trees[0].x = width/2 - 250;
   trees[1].x = width/2;
   trees[2].x = width/2 + 250;
-
   for(let t of trees){
     t.y = height/2 + 150;
   }
 }
 
 function draw(){
-
-  // 🔥 HÁTTÉR (a te színed)
+  // háttér lila
   background(229, 28, 90);
 
   if(state=="title") drawTitle();
@@ -48,42 +46,39 @@ function draw(){
 }
 
 function drawTitle(){
-
   if(titleImg){
     imageMode(CENTER);
-
     let w = width * 0.5;
     let h = w * (titleImg.height / titleImg.width);
-
     image(titleImg, width/2, height/2, w, h);
-
   } else {
-
-    // 🔥 MAKACS SZÍN (a tied)
     fill(307, 67, 39);
-
     textFont("Baskerville, serif");
     textSize(width/5);
-
     text("MAKACS", width/2, height/2);
   }
 
-  // 🔴 NYILAK (kicsit világosabb ugyanabból a hue-ból)
+  // nyilak animációval
+  drawAnimatedArrow(width/2 - 300, height/2, width/2 - 100, height/2);
+  drawAnimatedArrow(width/2 + 300, height/2, width/2 + 100, height/2);
+}
+
+function drawAnimatedArrow(x1, y1, x2, y2){
+  arrowPulse += 0.5 * pulseDir;
+  if(arrowPulse > 10 || arrowPulse < -10) pulseDir *= -1;
+
   stroke(307, 80, 60);
   strokeWeight(2);
-
-  line(width/2-300,height/2,width/2-100,height/2);
-  line(width/2+300,height/2,width/2+100,height/2);
+  line(x1, y1 + arrowPulse, x2, y2 + arrowPulse);
 
   noStroke();
   fill(307, 80, 60);
-
-  triangle(width/2-100,height/2,width/2-110,height/2-7,width/2-110,height/2+7);
-  triangle(width/2+100,height/2,width/2+110,height/2-7,width/2+110,height/2+7);
+  triangle(x2, y2 + arrowPulse,
+           x2-10, y2-7 + arrowPulse,
+           x2-10, y2+7 + arrowPulse);
 }
 
 function drawTrees(){
-
   for(let i=0;i<trees.length;i++){
     let t = trees[i];
 
@@ -95,11 +90,8 @@ function drawTrees(){
     }
 
     let d = dist(mouseX, mouseY, t.x, t.y);
-
     if(d < 50){
-      // 🔥 hover szöveg szín
       fill(307, 80, 20);
-
       textSize(22);
       text(t.label, t.x, t.y+90);
     }
@@ -107,47 +99,34 @@ function drawTrees(){
 }
 
 function drawPlaceholderTree(x,y){
-
-  // törzs
   fill(30, 40, 40);
-  rect(x-5,y,10,40);
-
-  // lomb (kicsit zöldes kontraszt)
+  rect(x-5, y, 10, 40);
   fill(120, 40, 60);
   triangle(x-30,y,x+30,y,x,y-60);
   triangle(x-25,y-20,x+25,y-20,x,y-80);
 }
 
 function drawPage(title){
-
-  // cím
   fill(307, 80, 20);
   textSize(50);
   text(title,width/2,height/2);
-
-  // vissza szöveg
   textSize(20);
   fill(307, 30, 30);
   text("Click anywhere to go back",width/2,height/2+80);
 }
 
 function mousePressed(){
-
   if(state=="title"){
     if(dist(mouseX,mouseY,width/2,height/2)<200){
       state="trees";
     }
-
   } else if(state=="trees"){
-
     for(let i=0;i<trees.length;i++){
       let t = trees[i];
-
       if(dist(mouseX,mouseY,t.x,t.y)<50){
         state = t.page;
       }
     }
-
   } else {
     state="trees";
   }
@@ -156,8 +135,3 @@ function mousePressed(){
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
 }
-  
-
- 
-
-   
