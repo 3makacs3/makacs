@@ -22,7 +22,6 @@ function preload(){
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
-  colorMode(HSB, 360, 100, 100);
   textAlign(CENTER, CENTER);
 
   // fák pozíció
@@ -35,8 +34,8 @@ function setup(){
 }
 
 function draw(){
-  // háttér lila
-  background(229, 28, 90);
+  // háttér HEX színnel
+  background('#b1b9fb');
 
   if(state=="title") drawTitle();
   else if(state=="trees") drawTrees();
@@ -52,13 +51,13 @@ function drawTitle(){
     let h = w * (titleImg.height / titleImg.width);
     image(titleImg, width/2, height/2, w, h);
   } else {
-    fill(307, 67, 39);
+    fill('#772469'); // sötét lila
     textFont("Baskerville, serif");
     textSize(width/5);
     text("MAKACS", width/2, height/2);
   }
 
-  // nyilak animációval
+  // animált nyilak HEX színnel
   drawAnimatedArrow(width/2 - 300, height/2, width/2 - 100, height/2);
   drawAnimatedArrow(width/2 + 300, height/2, width/2 + 100, height/2);
 }
@@ -67,15 +66,15 @@ function drawAnimatedArrow(x1, y1, x2, y2){
   arrowPulse += 0.5 * pulseDir;
   if(arrowPulse > 10 || arrowPulse < -10) pulseDir *= -1;
 
-  stroke(307, 80, 60);
-  strokeWeight(2);
+  stroke('#772469'); // látható szín
+  strokeWeight(4);
   line(x1, y1 + arrowPulse, x2, y2 + arrowPulse);
 
   noStroke();
-  fill(307, 80, 60);
+  fill('#772469');
   triangle(x2, y2 + arrowPulse,
-           x2-10, y2-7 + arrowPulse,
-           x2-10, y2+7 + arrowPulse);
+           x2-20, y2-10 + arrowPulse,
+           x2-20, y2+10 + arrowPulse);
 }
 
 function drawTrees(){
@@ -91,7 +90,7 @@ function drawTrees(){
 
     let d = dist(mouseX, mouseY, t.x, t.y);
     if(d < 50){
-      fill(307, 80, 20);
+      fill('#772469');
       textSize(22);
       text(t.label, t.x, t.y+90);
     }
@@ -99,19 +98,18 @@ function drawTrees(){
 }
 
 function drawPlaceholderTree(x,y){
-  fill(30, 40, 40);
+  fill('#4C3228'); // törzs barna
   rect(x-5, y, 10, 40);
-  fill(120, 40, 60);
+  fill('#28963C'); // lomb zöld
   triangle(x-30,y,x+30,y,x,y-60);
   triangle(x-25,y-20,x+25,y-20,x,y-80);
 }
 
 function drawPage(title){
-  fill(307, 80, 20);
+  fill('#772469');
   textSize(50);
   text(title,width/2,height/2);
   textSize(20);
-  fill(307, 30, 30);
   text("Click anywhere to go back",width/2,height/2+80);
 }
 
