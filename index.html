@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Makacs</title>
-
-  <!-- Baskerville eText betűtípus Google Fonts vagy CDN-ről -->
-  <link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #c2c8f6; /* világos lila/kék */
-      font-family: 'Baskerville eText', Times, serif; /* Baskerville eText, fallback Times */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      color: #772469; /* sötét lila */
-    }
-
-    h1 {
-      font-size: 12vw; /* nagy felirat, reszponzív */
-      margin: 0;
-      letter-spacing: 2px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Makacs</title>
+<link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
+<style>
+  body {
+    margin:0;
+    padding:0;
+    height:100vh;
+    background-color:#b1b9fb; /* világos lila háttér */
+    overflow:hidden;
+  }
+  h1 {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-family: 'Baskerville eText', Times, serif;
+    font-size:10vw;
+    color:#772469;
+    margin:0;
+    z-index:1;
+    pointer-events:none; /* hogy a felirat ne blokkolja az egérkattintást */
+  }
+  canvas {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:0;
+  }
+</style>
 </head>
 <body>
   <h1>Makacs</h1>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="makacs.js"></script>
 </body>
 </html>
