@@ -1,3 +1,4 @@
+
 let drawing = []; // tárolja az összes vonalat
 
 function setup() {
@@ -5,7 +6,7 @@ function setup() {
 }
 
 function draw() {
-  // újra rajzoljuk az összes vonalat, nem használunk clear()-t
+  // ne használj background()-t vagy clear()-t, így a HTML háttér és a felirat látszik
   for (let i = 0; i < drawing.length; i++) {
     let linePoints = drawing[i];
     stroke('#b46b9f'); // vonal színe
