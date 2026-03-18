@@ -15,7 +15,6 @@
     overflow:hidden;
   }
 
-  /* Canvas háttér, nem blokkolja az egér eseményeket */
   canvas {
     position:absolute;
     top:0;
@@ -24,25 +23,26 @@
     pointer-events: none;
   }
 
-  /* Makacs felirat */
-  #makacs {
+  h1#makacs, .menu-item, .art-item {
+    color:#772469;
+    margin:0;
+    text-align:center;
+    cursor:pointer;
     position:absolute;
+    z-index:2;
+    transition: transform 0.2s ease;
+  }
+
+  h1#makacs {
     top:40%;
     left:50%;
     transform:translate(-50%, -50%);
     font-size:10vw;
-    color:#772469;
-    cursor:pointer;
-    z-index:2;
-    transition: transform 0.2s ease;
-    margin:0;
-    text-align:center;
   }
-  #makacs:hover {
+  h1#makacs:hover {
     transform:translate(-50%, -50%) scale(1.2);
   }
 
-  /* Menüpontok */
   #menu {
     display:none;
     flex-direction: column;
@@ -51,43 +51,50 @@
     top:40%;
     left:50%;
     transform:translate(-50%, -50%);
-    z-index:2;
   }
   .menu-item {
     font-size:3vw;
-    color:#772469;
     margin:20px 0;
     text-transform: lowercase;
-    cursor:pointer;
-    transition: transform 0.2s ease;
-    text-align:center;
   }
   .menu-item:hover {
     transform: scale(1.2);
   }
 
-  /* Art-címek pulzálás */
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-  @keyframes aggressivePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.4); }
-    100% { transform: scale(1); }
-  }
   .art-item {
-    position:absolute;
     font-size:2vw;
-    color:#772469;
     text-transform: lowercase;
-    cursor:pointer;
-    z-index:2;
     animation: pulse 2s infinite ease-in-out;
   }
   .art-item.aggressive {
     animation: aggressivePulse 1s infinite ease-in-out;
+  }
+
+  @keyframes pulse { 0%{scale:1;} 50%{scale:1.1;} 100%{scale:1;} }
+  @keyframes aggressivePulse {0%{scale:1;}50%{scale:1.4;}100%{scale:1;}}
+  
+  /* Art-oldal */
+  .art-page {
+    display:none;
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background-color:#c2c8f6;
+    z-index:2;
+    color:#772469;
+    text-align:center;
+    font-size:5vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+  }
+
+  .art-page button {
+    margin-top:20px;
+    font-size:2vw;
+    padding:10px 20px;
+    cursor:pointer;
   }
 </style>
 </head>
@@ -101,24 +108,28 @@
   <h1 class="menu-item" onclick="alert('Contact clicked!')">contact</h1>
 </div>
 
+<!-- Art-címek oldala -->
+<div id="art-pages-container"></div>
+
 <script>
-  // Makacs felirat kattintás → menü
   const makacs = document.getElementById('makacs');
   const menu = document.getElementById('menu');
+  const artContainer = document.getElementById('art-pages-container');
 
+  // Makacs → menü
   makacs.addEventListener('click', () => {
     makacs.style.display = 'none';
     menu.style.display = 'flex';
   });
 
-  // my art → további art-címek
+  // My art → további art-címek
   document.getElementById('my-art').addEventListener('click', () => {
     const artItems = [
       'photos',
       'videos',
       'paintings',
       'makacs archive',
-      'everythingelseyoushouldcareabout!' // felkiáltójel
+      'everythingelseyoushouldcareabout!'
     ];
 
     artItems.forEach(text => {
@@ -127,50 +138,45 @@
       el.innerText = text;
       el.style.fontSize = '2vw';
       el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+      el.style.top = (text === 'everythingelseyoushouldcareabout!') ? '5%' : Math.random() * (window.innerHeight - 100) + 'px';
+      artContainer.appendChild(el);
 
-      // everythinges szöveg feljebb
-      if(text === 'everythingelseyoushouldcareabout!') {
-        el.style.top = '5%'; // feljebb, a többi art-cím random
-        el.classList.add('aggressive');
-      } else {
-        el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-      }
-
-      document.body.appendChild(el);
-
-      el.onclick = () => alert(text + ' clicked!');
+      // Klikk → saját art-oldal
+      el.addEventListener('click', () => {
+        showArtPage(text);
+      });
     });
   });
+
+  function showArtPage(title) {
+    // új div art-oldal
+    let page = document.createElement('div');
+    page.className = 'art-page';
+    page.innerHTML = `<div>${title}</div><button onclick="closeArtPage(this)">Vissza</button>`;
+    document.body.appendChild(page);
+    page.style.display = 'flex';
+  }
+
+  function closeArtPage(btn) {
+    btn.parentElement.remove();
+  }
 </script>
 
 <script>
-  // p5.js canvas a rajzoláshoz
+  // p5.js canvas rajzoláshoz
   let isDrawing = false;
-
   function setup() {
     createCanvas(windowWidth, windowHeight);
     background('#c2c8f6');
     stroke('#b46b9f');
     strokeWeight(3);
   }
-
   function draw() {
-    if (isDrawing && mouseIsPressed) {
-      line(mouseX, mouseY, pmouseX, pmouseY);
-    }
+    if (isDrawing && mouseIsPressed) line(mouseX, mouseY, pmouseX, pmouseY);
   }
-
-  function mousePressed() {
-    isDrawing = true;
-  }
-
-  function mouseReleased() {
-    isDrawing = false;
-  }
-
-  function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-  }
+  function mousePressed() { isDrawing = true; }
+  function mouseReleased() { isDrawing = false; }
+  function windowResized() { resizeCanvas(windowWidth, windowHeight); }
 </script>
 
 </body>
