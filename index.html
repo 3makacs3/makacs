@@ -10,42 +10,50 @@
     margin:0;
     padding:0;
     height:100vh;
-    background-color: #c2c8f6; /* háttér */
+    background-color:#c2c8f6;
     overflow:hidden;
     font-family: 'Baskerville eText', Times, serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
   }
 
   /* Hover effektek a fő címekhez */
   h1#makacs,
   .menu-item {
-    color:#772469;       /* fix szín */
+    color:#772469;
     margin:0;
     text-align:center;
     transition: transform 0.2s ease;
     cursor:pointer;
-  }
-  h1#makacs {
-    font-size:10vw;      /* fix méret */
     position:absolute;
+    z-index:2; /* canvas fölött legyen */
   }
+
+  h1#makacs {
+    font-size:10vw;
+    top:40%;
+    left:50%;
+    transform:translate(-50%, -50%);
+  }
+
   h1#makacs:hover,
   .menu-item:hover {
-    transform: scale(1.2);
+    transform:translate(-50%, -50%) scale(1.2);
   }
 
   #menu {
     display:none;
     flex-direction: column;
     align-items: center;
-    z-index:1;
+    z-index:2;
+    position:absolute;
+    top:40%;
+    left:50%;
+    transform:translate(-50%, -50%);
   }
+
   .menu-item {
-    font-size:3vw;       /* fő menüpont méret */
+    font-size:3vw;
     text-transform: lowercase;
-    margin: 20px 0;
+    margin:20px 0;
   }
 
   /* Art-címek pulzálás */
@@ -62,11 +70,11 @@
 
   .art-item {
     position:absolute;
-    font-size:2vw;       /* további art-címek */
+    font-size:2vw;
     color:#772469;
     text-transform: lowercase;
     cursor:pointer;
-    z-index:1;
+    z-index:2;
     animation: pulse 2s infinite ease-in-out;
   }
   .art-item.aggressive {
@@ -77,56 +85,85 @@
     position:absolute;
     top:0;
     left:0;
-    z-index:0;
+    z-index:1; /* a szöveg mögött */
   }
 </style>
 </head>
 <body>
-  <h1 id="makacs">Makacs</h1>
 
-  <div id="menu">
-    <h1 class="menu-item" onclick="alert('About Me clicked!')">about me</h1>
-    <h1 class="menu-item" id="my-art">my art</h1>
-    <h1 class="menu-item" onclick="alert('Contact clicked!')">contact</h1>
-  </div>
+<h1 id="makacs">Makacs</h1>
 
-  <script src="makacs.js"></script>
-  <script>
-    // Makacs felirat kattintás → menü
-    document.getElementById('makacs').addEventListener('click', () => {
-      document.getElementById('makacs').style.display = 'none';
-      document.getElementById('menu').style.display = 'flex';
+<div id="menu">
+  <h1 class="menu-item" onclick="alert('About Me clicked!')">about me</h1>
+  <h1 class="menu-item" id="my-art">my art</h1>
+  <h1 class="menu-item" onclick="alert('Contact clicked!')">contact</h1>
+</div>
+
+<script>
+  // Makacs felirat kattintás → menü
+  document.getElementById('makacs').addEventListener('click', () => {
+    document.getElementById('makacs').style.display = 'none';
+    document.getElementById('menu').style.display = 'flex';
+  });
+
+  // my art → további art-címek
+  document.getElementById('my-art').addEventListener('click', () => {
+    const artItems = [
+      'photos',
+      'videos',
+      'paintings',
+      'makacs archive',
+      'everythingelseyoushouldcareabout!' // felkiáltójel
+    ];
+
+    artItems.forEach((text) => {
+      const el = document.createElement('h1');
+      el.className = 'art-item';
+      el.innerText = text;
+      el.style.fontSize = '2vw';
+      el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+      el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+      document.body.appendChild(el);
+
+      if(text === 'everythingelseyoushouldcareabout!') {
+        el.classList.add('aggressive');
+      }
+
+      el.onclick = () => alert(text + ' clicked!');
     });
+  });
+</script>
 
-    // my art → további art-címek
-    document.getElementById('my-art').addEventListener('click', () => {
-      const artItems = [
-        'photos',
-        'videos',
-        'paintings',
-        'makacs archive',
-        'everythingelseyoushouldcareabout!' // felkiáltójel
-      ];
+<script>
+  // p5.js sketch a rajzoláshoz
+  let drawing = [];
+  let isDrawing = false;
 
-      artItems.forEach((text) => {
-        const el = document.createElement('h1');
-        el.className = 'art-item';
-        el.innerText = text;
-        el.style.fontSize = '2vw';
-        el.style.color = '#772469';
-        el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-        el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-        document.body.appendChild(el);
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    background('#c2c8f6');
+    stroke('#b46b9f');
+    strokeWeight(3);
+  }
 
-        if(text === 'everythingelseyoushouldcareabout!') {
-          el.classList.add('aggressive');
-        }
+  function draw() {
+    if (isDrawing && mouseIsPressed) {
+      line(mouseX, mouseY, pmouseX, pmouseY);
+    }
+  }
 
-        el.onclick = () => alert(text + ' clicked!');
-      });
-    });
-  </script>
+  function mousePressed() {
+    isDrawing = true;
+  }
+
+  function mouseReleased() {
+    isDrawing = false;
+  }
+
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+  }
+</script>
+
 </body>
 </html>
-  
-      
