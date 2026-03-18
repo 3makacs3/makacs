@@ -10,35 +10,65 @@
     margin:0;
     padding:0;
     height:100vh;
-    background-color: #c2c8f6; /* háttér */
+    background-color: #c2c8f6;
     overflow:hidden;
     font-family: 'Baskerville eText', Times, serif;
     display:flex;
     justify-content:center;
     align-items:center;
   }
-  h1#makacs {
-    font-size:10vw;
-    color:#772469;
-    margin:0;
+
+  /* Hover effektek a fő címekhez */
+  h1#makacs,
+  .menu-item {
+    transition: transform 0.2s ease;
     cursor:pointer;
-    z-index:1;
-    text-align:center;
-    position:absolute;
   }
+  h1#makacs:hover,
+  .menu-item:hover {
+    transform: scale(1.2);
+  }
+
   #menu {
     display:none;
     flex-direction: column;
     align-items: center;
     z-index:1;
   }
+
   .menu-item {
-    font-size:2vw;
+    font-size:3vw; /* fő menüpontok */
     color:#772469;
     text-transform: lowercase;
     margin: 20px 0;
-    cursor:pointer;
   }
+
+  /* Art-címek pulzálás */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  @keyframes aggressivePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  .art-item {
+    position:absolute;
+    font-size:2vw;
+    color:#772469;
+    text-transform: lowercase;
+    cursor:pointer;
+    z-index:1;
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  .art-item.aggressive {
+    animation: aggressivePulse 1s infinite ease-in-out;
+  }
+
   canvas {
     position:absolute;
     top:0;
@@ -52,15 +82,44 @@
 
   <div id="menu">
     <h1 class="menu-item" onclick="alert('About Me clicked!')">about me</h1>
-    <h1 class="menu-item" onclick="alert('My Art clicked!')">my art</h1>
+    <h1 class="menu-item" id="my-art">my art</h1>
     <h1 class="menu-item" onclick="alert('Contact clicked!')">contact</h1>
   </div>
 
   <script src="makacs.js"></script>
   <script>
+    // Makacs felirat kattintás → menü
     document.getElementById('makacs').addEventListener('click', () => {
       document.getElementById('makacs').style.display = 'none';
       document.getElementById('menu').style.display = 'flex';
+    });
+
+    // my art → további art-címek
+    document.getElementById('my-art').addEventListener('click', () => {
+      const artItems = [
+        'photos',
+        'videos',
+        'paintings',
+        'makacs archive',
+        'everythingelseyoushouldcareabout!' // felkiáltó jel hozzáadva
+      ];
+
+      artItems.forEach((text) => {
+        const el = document.createElement('h1');
+        el.className = 'art-item';
+        el.innerText = text;
+        el.style.fontSize = '2vw';
+        el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+        el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+        document.body.appendChild(el);
+
+        // “everythingelseyoushouldcareabout!” agresszívabb pulzálás
+        if(text === 'everythingelseyoushouldcareabout!') {
+          el.classList.add('aggressive');
+        }
+
+        el.onclick = () => alert(text + ' clicked!');
+      });
     });
   </script>
 </body>
