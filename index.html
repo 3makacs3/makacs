@@ -23,18 +23,23 @@
     color:#772469;
     margin:0;
     z-index:1;
-    pointer-events: none; /* így a felirat nem blokkolja az egér rajzolást */
+    cursor:pointer; /* így látod, hogy kattintható */
   }
   canvas {
     position:absolute;
     top:0;
     left:0;
-    z-index:0;
+    z-index:0; /* canvas a felirat alatt */
   }
 </style>
 </head>
 <body>
-  <h1>Makacs</h1>
+  <h1 id="makacs">Makacs</h1>
   <script src="makacs.js"></script>
+  <script>
+    document.getElementById('makacs').addEventListener('click', () => {
+      window.location.href = "menu.html"; // új oldalra visz
+    });
+  </script>
 </body>
 </html>
