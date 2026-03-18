@@ -1,9 +1,5 @@
-let state = "title";
-
-// képek (ha nincsenek, null)
-let titleImg;
+let state = "trees"; // kezdő állapot "trees", mert a felirat HTML-ben van
 let treeImgs = [];
-
 let trees = [
   {x:0, y:0, label:"My Art", page:"art"},
   {x:0, y:0, label:"About Me", page:"about"},
@@ -14,7 +10,6 @@ let arrowPulse = 0;
 let pulseDir = 1;
 
 function preload(){
-  titleImg = loadImage("images/makacs.png", ()=>{}, ()=>{titleImg=null});
   treeImgs[0] = loadImage("images/tree1.png", ()=>{}, ()=>{treeImgs[0]=null});
   treeImgs[1] = loadImage("images/tree2.png", ()=>{}, ()=>{treeImgs[1]=null});
   treeImgs[2] = loadImage("images/tree3.png", ()=>{}, ()=>{treeImgs[2]=null});
@@ -24,7 +19,6 @@ function setup(){
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
 
-  // fák pozíció
   trees[0].x = width/2 - 250;
   trees[1].x = width/2;
   trees[2].x = width/2 + 250;
@@ -34,49 +28,32 @@ function setup(){
 }
 
 function draw(){
-  background('#b1b9fb'); // világos lila háttér
+  clear(); // átlátszó, a háttér a HTML-ben van
 
-  if(state=="title") drawTitle();
-  else if(state=="trees") drawTrees();
+  drawArrows();
+
+  if(state=="trees") drawTrees();
   else if(state=="art") drawPage("My Art");
   else if(state=="about") drawPage("About Me");
   else if(state=="contact") drawPage("Contact");
 }
 
-function drawTitle(){
-  if(titleImg){
-    imageMode(CENTER);
-    let w = width * 0.5;
-    let h = w * (titleImg.height / titleImg.width);
-    image(titleImg, width/2, height/2, w, h);
-  } else {
-    fill('#772469'); // sötét lila
-    textFont("Baskerville, serif");
-    textSize(width/5);
-    text("MAKACS", width/2, height/2);
-  }
-
-  // pulzáló nyilak
-  drawArrow(width/2 - 300, height/2, width/2 - 100, height/2);
-  drawArrow(width/2 + 300, height/2, width/2 + 100, height/2);
-}
-
-function drawArrow(x1, y1, x2, y2){
-  // pulzálás
+function drawArrows(){
   arrowPulse += 0.5 * pulseDir;
-  if(arrowPulse > 10 || arrowPulse < -10) pulseDir *= -1;
+  if(arrowPulse>10||arrowPulse<-10) pulseDir*=-1;
 
   stroke('#772469');
-  strokeWeight(6); // vastag nyíl
-  line(x1, y1 + arrowPulse, x2, y2 + arrowPulse);
+  strokeWeight(6);
+  // balról felirat felé
+  line(width/2-300, height/2+arrowPulse, width/2, height/2);
+  // jobbról felirat felé
+  line(width/2+300, height/2+arrowPulse, width/2, height/2);
 
   noStroke();
   fill('#772469');
-  triangle(
-    x2, y2 + arrowPulse,
-    x2-30, y2-15 + arrowPulse,
-    x2-30, y2+15 + arrowPulse
-  );
+  triangle(width/2, height/2,
+           width/2-30, height/2-15+arrowPulse,
+           width/2-30, height/2+15+arrowPulse);
 }
 
 function drawTrees(){
@@ -116,11 +93,7 @@ function drawPage(title){
 }
 
 function mousePressed(){
-  if(state=="title"){
-    if(dist(mouseX,mouseY,width/2,height/2)<200){
-      state="trees";
-    }
-  } else if(state=="trees"){
+  if(state=="trees"){
     for(let i=0;i<trees.length;i++){
       let t = trees[i];
       if(dist(mouseX,mouseY,t.x,t.y)<50){
