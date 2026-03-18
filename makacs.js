@@ -2,7 +2,7 @@ let drawing = []; // tárolja az összes vonalat
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background('#b1b9fb'); // világos lila háttér
+  background('#c2c8f6'); // világos lila háttér
 }
 
 function draw() {
