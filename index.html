@@ -15,13 +15,13 @@
     overflow:hidden;
   }
 
-  /* Canvas háttér, nem fogja blokkolni az egér eseményeket */
+  /* Canvas háttér, nem blokkolja az egér eseményeket */
   canvas {
     position:absolute;
     top:0;
     left:0;
     z-index:1;
-    pointer-events: none; /* ez a kulcs! */
+    pointer-events: none;
   }
 
   /* Makacs felirat */
@@ -127,10 +127,16 @@
       el.innerText = text;
       el.style.fontSize = '2vw';
       el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-      el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-      document.body.appendChild(el);
 
-      if(text === 'everythingelseyoushouldcareabout!') el.classList.add('aggressive');
+      // everythinges szöveg feljebb
+      if(text === 'everythingelseyoushouldcareabout!') {
+        el.style.top = '5%'; // feljebb, a többi art-cím random
+        el.classList.add('aggressive');
+      } else {
+        el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+      }
+
+      document.body.appendChild(el);
 
       el.onclick = () => alert(text + ' clicked!');
     });
