@@ -9,7 +9,7 @@ function draw() {
   // minden frame-ben újrarajzoljuk az összes vonalat
   for (let i = 0; i < drawing.length; i++) {
     let linePoints = drawing[i];
-    stroke('#c2c8f6'); // vonal színe
+    stroke('#b46b9f'); // vonal színe
     strokeWeight(2);
     noFill();
     beginShape();
