@@ -11,49 +11,59 @@
     padding:0;
     height:100vh;
     background-color:#c2c8f6;
-    overflow:hidden;
     font-family: 'Baskerville eText', Times, serif;
+    overflow:hidden;
   }
 
-  /* Hover effektek a fő címekhez */
-  h1#makacs,
-  .menu-item {
-    color:#772469;
-    margin:0;
-    text-align:center;
-    transition: transform 0.2s ease;
-    cursor:pointer;
+  /* Canvas háttér, nem fogja blokkolni az egér eseményeket */
+  canvas {
     position:absolute;
-    z-index:2; /* canvas fölött legyen */
+    top:0;
+    left:0;
+    z-index:1;
+    pointer-events: none; /* ez a kulcs! */
   }
 
-  h1#makacs {
-    font-size:10vw;
+  /* Makacs felirat */
+  #makacs {
+    position:absolute;
     top:40%;
     left:50%;
     transform:translate(-50%, -50%);
+    font-size:10vw;
+    color:#772469;
+    cursor:pointer;
+    z-index:2;
+    transition: transform 0.2s ease;
+    margin:0;
+    text-align:center;
   }
-
-  h1#makacs:hover,
-  .menu-item:hover {
+  #makacs:hover {
     transform:translate(-50%, -50%) scale(1.2);
   }
 
+  /* Menüpontok */
   #menu {
     display:none;
     flex-direction: column;
-    align-items: center;
-    z-index:2;
+    align-items:center;
     position:absolute;
     top:40%;
     left:50%;
     transform:translate(-50%, -50%);
+    z-index:2;
   }
-
   .menu-item {
     font-size:3vw;
-    text-transform: lowercase;
+    color:#772469;
     margin:20px 0;
+    text-transform: lowercase;
+    cursor:pointer;
+    transition: transform 0.2s ease;
+    text-align:center;
+  }
+  .menu-item:hover {
+    transform: scale(1.2);
   }
 
   /* Art-címek pulzálás */
@@ -67,7 +77,6 @@
     50% { transform: scale(1.4); }
     100% { transform: scale(1); }
   }
-
   .art-item {
     position:absolute;
     font-size:2vw;
@@ -79,13 +88,6 @@
   }
   .art-item.aggressive {
     animation: aggressivePulse 1s infinite ease-in-out;
-  }
-
-  canvas {
-    position:absolute;
-    top:0;
-    left:0;
-    z-index:1; /* a szöveg mögött */
   }
 </style>
 </head>
@@ -101,9 +103,12 @@
 
 <script>
   // Makacs felirat kattintás → menü
-  document.getElementById('makacs').addEventListener('click', () => {
-    document.getElementById('makacs').style.display = 'none';
-    document.getElementById('menu').style.display = 'flex';
+  const makacs = document.getElementById('makacs');
+  const menu = document.getElementById('menu');
+
+  makacs.addEventListener('click', () => {
+    makacs.style.display = 'none';
+    menu.style.display = 'flex';
   });
 
   // my art → további art-címek
@@ -116,7 +121,7 @@
       'everythingelseyoushouldcareabout!' // felkiáltójel
     ];
 
-    artItems.forEach((text) => {
+    artItems.forEach(text => {
       const el = document.createElement('h1');
       el.className = 'art-item';
       el.innerText = text;
@@ -125,9 +130,7 @@
       el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
       document.body.appendChild(el);
 
-      if(text === 'everythingelseyoushouldcareabout!') {
-        el.classList.add('aggressive');
-      }
+      if(text === 'everythingelseyoushouldcareabout!') el.classList.add('aggressive');
 
       el.onclick = () => alert(text + ' clicked!');
     });
@@ -135,8 +138,7 @@
 </script>
 
 <script>
-  // p5.js sketch a rajzoláshoz
-  let drawing = [];
+  // p5.js canvas a rajzoláshoz
   let isDrawing = false;
 
   function setup() {
