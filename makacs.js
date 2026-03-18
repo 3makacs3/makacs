@@ -34,8 +34,7 @@ function setup(){
 }
 
 function draw(){
-  // háttér HEX színnel
-  background('#b1b9fb');
+  background('#b1b9fb'); // világos lila háttér
 
   if(state=="title") drawTitle();
   else if(state=="trees") drawTrees();
@@ -57,24 +56,27 @@ function drawTitle(){
     text("MAKACS", width/2, height/2);
   }
 
-  // animált nyilak HEX színnel
-  drawAnimatedArrow(width/2 - 300, height/2, width/2 - 100, height/2);
-  drawAnimatedArrow(width/2 + 300, height/2, width/2 + 100, height/2);
+  // pulzáló nyilak
+  drawArrow(width/2 - 300, height/2, width/2 - 100, height/2);
+  drawArrow(width/2 + 300, height/2, width/2 + 100, height/2);
 }
 
-function drawAnimatedArrow(x1, y1, x2, y2){
+function drawArrow(x1, y1, x2, y2){
+  // pulzálás
   arrowPulse += 0.5 * pulseDir;
   if(arrowPulse > 10 || arrowPulse < -10) pulseDir *= -1;
 
-  stroke('#772469'); // látható szín
-  strokeWeight(4);
+  stroke('#772469');
+  strokeWeight(6); // vastag nyíl
   line(x1, y1 + arrowPulse, x2, y2 + arrowPulse);
 
   noStroke();
   fill('#772469');
-  triangle(x2, y2 + arrowPulse,
-           x2-20, y2-10 + arrowPulse,
-           x2-20, y2+10 + arrowPulse);
+  triangle(
+    x2, y2 + arrowPulse,
+    x2-30, y2-15 + arrowPulse,
+    x2-30, y2+15 + arrowPulse
+  );
 }
 
 function drawTrees(){
