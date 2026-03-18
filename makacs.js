@@ -1,11 +1,11 @@
-let drawing = []; // összes vonal
+let drawing = []; // tárolja az összes vonalat
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  // ne használj clear()! így a vonalak megmaradnak
+  // újra rajzoljuk az összes vonalat, nem használunk clear()-t
   for (let i = 0; i < drawing.length; i++) {
     let linePoints = drawing[i];
     stroke('#b46b9f'); // vonal színe
