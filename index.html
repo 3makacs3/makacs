@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     height:100vh;
-    background-color: #c2c8f6;
+    background-color: #c2c8f6; /* háttér */
     overflow:hidden;
     font-family: 'Baskerville eText', Times, serif;
     display:flex;
@@ -21,8 +21,15 @@
   /* Hover effektek a fő címekhez */
   h1#makacs,
   .menu-item {
+    color:#772469;       /* fix szín */
+    margin:0;
+    text-align:center;
     transition: transform 0.2s ease;
     cursor:pointer;
+  }
+  h1#makacs {
+    font-size:10vw;      /* fix méret */
+    position:absolute;
   }
   h1#makacs:hover,
   .menu-item:hover {
@@ -35,10 +42,8 @@
     align-items: center;
     z-index:1;
   }
-
   .menu-item {
-    font-size:3vw; /* fő menüpontok */
-    color:#772469;
+    font-size:3vw;       /* fő menüpont méret */
     text-transform: lowercase;
     margin: 20px 0;
   }
@@ -57,14 +62,13 @@
 
   .art-item {
     position:absolute;
-    font-size:2vw;
+    font-size:2vw;       /* további art-címek */
     color:#772469;
     text-transform: lowercase;
     cursor:pointer;
     z-index:1;
     animation: pulse 2s infinite ease-in-out;
   }
-
   .art-item.aggressive {
     animation: aggressivePulse 1s infinite ease-in-out;
   }
@@ -101,7 +105,7 @@
         'videos',
         'paintings',
         'makacs archive',
-        'everythingelseyoushouldcareabout!' // felkiáltó jel hozzáadva
+        'everythingelseyoushouldcareabout!' // felkiáltójel
       ];
 
       artItems.forEach((text) => {
@@ -109,11 +113,11 @@
         el.className = 'art-item';
         el.innerText = text;
         el.style.fontSize = '2vw';
+        el.style.color = '#772469';
         el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
         el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
         document.body.appendChild(el);
 
-        // “everythingelseyoushouldcareabout!” agresszívabb pulzálás
         if(text === 'everythingelseyoushouldcareabout!') {
           el.classList.add('aggressive');
         }
@@ -124,3 +128,5 @@
   </script>
 </body>
 </html>
+  
+      
