@@ -62,11 +62,12 @@
     text-transform: lowercase;
     cursor:pointer;
     animation: pulse 2s infinite ease-in-out;
+    position:absolute;
   }
   .art-item.aggressive { animation: aggressivePulse 1s infinite ease-in-out; }
 
   @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.1);} 100%{transform:scale(1);} }
-  @keyframes aggressivePulse {0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
+  @keyframes aggressivePulse {0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);} }
 
   .art-page {
     display:none;
@@ -112,6 +113,10 @@
 
   // My Art kattintás → art-címek
   document.getElementById('my-art').addEventListener('click', () => {
+
+    // 🔥 ne duplikálódjon
+    artContainer.innerHTML = "";
+
     const artItems = [
       'photos',
       'videos',
@@ -120,19 +125,30 @@
       'everythingelseyoushouldcareabout!'
     ];
 
-    artItems.forEach((text, index) => {
+    artItems.forEach((text) => {
+
       const el = document.createElement('h1');
       el.className = 'art-item';
       el.innerText = text;
-      // minden cím egyenesen középre, feljebb a "everythinges"
-      if(text === 'everythingelseyoushouldcareabout!') {
-        el.style.top = '10%';
+
+      // ideiglenesen hozzáadjuk méréshez
+      el.style.visibility = "hidden";
+      artContainer.appendChild(el);
+
+      const rect = el.getBoundingClientRect();
+      const padding = 20;
+
+      const x = Math.random() * (window.innerWidth - rect.width - padding*2) + padding;
+      const y = Math.random() * (window.innerHeight - rect.height - padding*2) + padding;
+
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+
+      if(text === 'everythingelseyoushouldcareabout!'){
         el.classList.add('aggressive');
-      } else {
-        el.style.top = (20 + index*12) + '%';
       }
-      el.style.left = '50%';
-      el.style.transform = 'translateX(-50%)';
+
+      el.style.visibility = "visible";
 
       artContainer.appendChild(el);
 
