@@ -24,7 +24,6 @@ canvas {
   pointer-events: none;
 }
 
-/* ❗ EZ VOLT A BAJ → kivettük a width:100%-t az art-itemből */
 h1#makacs, #menu, .art-page {
   z-index:2;
   position:absolute;
@@ -43,6 +42,22 @@ h1#makacs, #menu, .art-page {
   text-transform: lowercase;
   cursor:pointer;
   animation: pulse 2s infinite ease-in-out;
+}
+
+.art-item.aggressive {
+  animation: aggressivePulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
+
+@keyframes aggressivePulse {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.4);}
+  100%{transform:scale(1);}
 }
 
 /* MAKACS */
@@ -72,23 +87,6 @@ h1#makacs:hover {
 }
 .menu-item:hover { transform: scale(1.2); }
 
-/* ANIM */
-.art-item.aggressive {
-  animation: aggressivePulse 1s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%{transform:scale(1);}
-  50%{transform:scale(1.1);}
-  100%{transform:scale(1);}
-}
-
-@keyframes aggressivePulse {
-  0%{transform:scale(1);}
-  50%{transform:scale(1.4);}
-  100%{transform:scale(1);}
-}
-
 /* ART PAGE */
 .art-page {
   display:none;
@@ -97,15 +95,27 @@ h1#makacs:hover {
   background-color:#c2c8f6;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
   flex-direction: column;
+  overflow-y:auto;
+  padding:50px;
+  box-sizing:border-box;
 }
 
 .art-page button {
-  margin-top:20px;
+  margin-top:50px;
   font-size:2vw;
   padding:10px 20px;
   cursor:pointer;
+}
+
+/* MEDIA */
+.media {
+  margin-bottom:60px;
+}
+.media p {
+  margin-top:10px;
+  font-size:1.5vw;
 }
 </style>
 </head>
@@ -127,13 +137,14 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
+// Makacs kattintás
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
+// My Art kattintás → art-címek random helyen, nem takarják a menüt
 document.getElementById('my-art').onclick = () => {
-
   artContainer.innerHTML = "";
 
   const artItems = [
@@ -158,12 +169,13 @@ document.getElementById('my-art').onclick = () => {
 
     let x, y;
 
+    // generálás random, de nem a menü területére
     do {
       x = Math.random() * (window.innerWidth - rect.width - padding);
       y = Math.random() * (window.innerHeight - rect.height - padding);
     } while (
       y > window.innerHeight * 0.35 &&
-      y < window.innerHeight * 0.65
+      y < window.innerHeight * 0.65 // menü ne legyen takarva
     );
 
     el.style.left = x + "px";
@@ -179,15 +191,36 @@ document.getElementById('my-art').onclick = () => {
   });
 };
 
+// Art page generálás scrollal és feltöltés helyének jelzése
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
-  page.innerHTML = `<div>${title}</div><button onclick="this.parentElement.remove()">vissza</button>`;
+
+  page.innerHTML = `
+    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
+
+    <!-- IDE TUDSZ KÉPET/VIDEÓT HOZZÁADNI -->
+    <div class="media">
+      <img src="https://via.placeholder.com/600x400" style="width:100%;">
+      <p>példa kép</p>
+    </div>
+
+    <div class="media">
+      <video controls style="width:100%;">
+        <source src="" type="video/mp4">
+      </video>
+      <p>példa videó</p>
+    </div>
+
+    <button onclick="this.closest('.art-page').remove()">vissza</button>
+  `;
+
   document.body.appendChild(page);
-  page.style.display = 'flex';
+  page.style.display = 'block';
 }
 </script>
 
+<!-- p5.js canvas rajzolás -->
 <script>
 let isDrawing = false;
 
