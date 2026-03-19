@@ -48,6 +48,7 @@
     top:50%;
     transform: translateY(-50%);
   }
+
   .menu-item {
     font-size:3vw;
     margin:20px 0;
@@ -64,10 +65,22 @@
     animation: pulse 2s infinite ease-in-out;
     position:absolute;
   }
-  .art-item.aggressive { animation: aggressivePulse 1s infinite ease-in-out; }
 
-  @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.1);} 100%{transform:scale(1);} }
-  @keyframes aggressivePulse {0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);} }
+  .art-item.aggressive {
+    animation: aggressivePulse 1s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+  }
+
+  @keyframes aggressivePulse {
+    0%{transform:scale(1);}
+    50%{transform:scale(1.4);}
+    100%{transform:scale(1);}
+  }
 
   .art-page {
     display:none;
@@ -79,6 +92,7 @@
     align-items:center;
     flex-direction: column;
   }
+
   .art-page button {
     margin-top:20px;
     font-size:2vw;
@@ -87,6 +101,7 @@
   }
 </style>
 </head>
+
 <body>
 
 <h1 id="makacs">Makacs</h1>
@@ -97,93 +112,101 @@
   <h1 class="menu-item">contact</h1>
 </div>
 
-<!-- Art-címek -->
 <div id="art-items-container"></div>
 
 <script>
-  const makacs = document.getElementById('makacs');
-  const menu = document.getElementById('menu');
-  const artContainer = document.getElementById('art-items-container');
+const makacs = document.getElementById('makacs');
+const menu = document.getElementById('menu');
+const artContainer = document.getElementById('art-items-container');
 
-  // Makacs felirat kattintás
-  makacs.addEventListener('click', () => {
-    makacs.style.display = 'none';
-    menu.style.display = 'block';
+makacs.addEventListener('click', () => {
+  makacs.style.display = 'none';
+  menu.style.display = 'block';
+});
+
+document.getElementById('my-art').addEventListener('click', () => {
+
+  artContainer.innerHTML = "";
+
+  const artItems = [
+    'photos',
+    'videos',
+    'paintings',
+    'makacs archive',
+    'everythingelseyoushouldcareabout!'
+  ];
+
+  artItems.forEach((text) => {
+
+    const el = document.createElement('h1');
+    el.className = 'art-item';
+    el.innerText = text;
+
+    el.style.visibility = "hidden";
+    artContainer.appendChild(el);
+
+    const rect = el.getBoundingClientRect();
+    const padding = 20;
+
+    let x, y;
+
+    // 🔥 addig generálunk, amíg nem ütközik a menüvel
+    do {
+      x = Math.random() * (window.innerWidth - rect.width - padding*2) + padding;
+      y = Math.random() * (window.innerHeight - rect.height - padding*2) + padding;
+    } while (
+      y > window.innerHeight * 0.35 && 
+      y < window.innerHeight * 0.65
+    );
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+
+    if(text === 'everythingelseyoushouldcareabout!'){
+      el.classList.add('aggressive');
+    }
+
+    el.style.visibility = "visible";
+
+    el.addEventListener('click', () => showArtPage(text));
   });
+});
 
-  // My Art kattintás → art-címek
-  document.getElementById('my-art').addEventListener('click', () => {
+function showArtPage(title) {
+  const page = document.createElement('div');
+  page.className = 'art-page';
+  page.innerHTML = `<div>${title}</div><button onclick="closeArtPage(this)">Vissza</button>`;
+  document.body.appendChild(page);
+  page.style.display = 'flex';
+}
 
-    // 🔥 ne duplikálódjon
-    artContainer.innerHTML = "";
-
-    const artItems = [
-      'photos',
-      'videos',
-      'paintings',
-      'makacs archive',
-      'everythingelseyoushouldcareabout!'
-    ];
-
-    artItems.forEach((text) => {
-
-      const el = document.createElement('h1');
-      el.className = 'art-item';
-      el.innerText = text;
-
-      // ideiglenesen hozzáadjuk méréshez
-      el.style.visibility = "hidden";
-      artContainer.appendChild(el);
-
-      const rect = el.getBoundingClientRect();
-      const padding = 20;
-
-      const x = Math.random() * (window.innerWidth - rect.width - padding*2) + padding;
-      const y = Math.random() * (window.innerHeight - rect.height - padding*2) + padding;
-
-      el.style.left = x + "px";
-      el.style.top = y + "px";
-
-      if(text === 'everythingelseyoushouldcareabout!'){
-        el.classList.add('aggressive');
-      }
-
-      el.style.visibility = "visible";
-
-      artContainer.appendChild(el);
-
-      el.addEventListener('click', () => showArtPage(text));
-    });
-  });
-
-  function showArtPage(title) {
-    const page = document.createElement('div');
-    page.className = 'art-page';
-    page.innerHTML = `<div>${title}</div><button onclick="closeArtPage(this)">Vissza</button>`;
-    document.body.appendChild(page);
-    page.style.display = 'flex';
-  }
-
-  function closeArtPage(btn) {
-    btn.parentElement.remove();
-  }
+function closeArtPage(btn) {
+  btn.parentElement.remove();
+}
 </script>
 
 <script>
-  // p5.js canvas rajzolás
-  let isDrawing = false;
-  function setup() {
-    createCanvas(windowWidth, windowHeight);
-    background('#c2c8f6');
-    stroke('#b46b9f');
-    strokeWeight(3);
+let isDrawing = false;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background('#c2c8f6');
+  stroke('#b46b9f');
+  strokeWeight(3);
+}
+
+function draw() {
+  if(isDrawing && mouseIsPressed){
+    line(mouseX, mouseY, pmouseX, pmouseY);
   }
-  function draw() {
-    if(isDrawing && mouseIsPressed) line(mouseX, mouseY, pmouseX, pmouseY);
-  }
-  function mousePressed() { isDrawing = true; }
-  function mouseReleased() { isDrawing = false; }
-  function windowResized() { resizeCanvas(windowWidth, windowHeight); }
+}
+
+function mousePressed() { isDrawing = true; }
+function mouseReleased() { isDrawing = false; }
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 </script>
 
 </body>
