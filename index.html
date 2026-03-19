@@ -3,286 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <title>Makacs</title>
-
 <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
 <link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
-
 <style>
-body{
-  margin:0;
-  background:#c2c8f6;
-  font-family:'Baskerville eText', serif;
-  overflow:hidden;
-}
-
-canvas{
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:1;
-  pointer-events:none;
-}
-
-#makacs,#menu{
-  position:absolute;
-  width:100%;
-  text-align:center;
-  color:#772469;
-  z-index:2;
-}
-
-#makacs{
-  top:40%;
-  font-size:10vw;
-  cursor:pointer;
-}
-
-#menu{
-  display:none;
-  top:50%;
-  transform:translateY(-50%);
-}
-
-.menu-item{
-  font-size:3vw;
-  margin:20px;
-  cursor:pointer;
-}
-
-.collection{
-  display:none;
-  position:absolute;
-  width:100%;
-  height:100%;
-  overflow-y:auto;
-  background:#c2c8f6;
-  z-index:3;
-  padding-top:100px;
-}
-
-.item{
-  width:200px;
-  margin:40px auto;
-  text-align:center;
-  color:#772469;
-  cursor:pointer;
-}
-
-.item img, .item video{
-  width:100%;
-}
-
-.viewer{
-  display:none;
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:#c2c8f6;
-  z-index:4;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-}
-
-.viewer img, .viewer video{
-  max-width:80%;
-  max-height:60%;
-}
-
-button{
-  margin-top:20px;
-}
-</style>
-</head>
-
-<body>
-
-<h1 id="makacs">makacs</h1>
-
-<div id="menu">
-  <div class="menu-item">about me</div>
-  <div class="menu-item" id="myArt">my art</div>
-  <div class="menu-item">contact</div>
-</div>
-
-<div id="collection" class="collection"></div>
-
-<div id="viewer" class="viewer">
-  <img id="vimg">
-  <video id="vvid" controls></video>
-  <p id="vdesc"></p>
-  <button onclick="closeViewer()">back</button>
-</div>
-
-<script>
-let showArt=false;
-let isDrawing=false;
-
-const makacs = document.getElementById("makacs");
-const menu = document.getElementById("menu");
-const myArt = document.getElementById("myArt");
-const collection = document.getElementById("collection");
-
-makacs.onclick=()=>{
-  makacs.style.display="none";
-  menu.style.display="block";
-};
-
-myArt.onclick=()=>{
-  showArt=true;
-};
-
-let artItems=[
-{
- title:"photos",
- x:0,y:0,scale:1,speed:0.01,
- items:[]
-},
-{
- title:"videos",
- x:0,y:0,scale:1,speed:0.01,
- items:[]
-},
-{
- title:"makacs archive",
- x:0,y:0,scale:1,speed:0.01,
- items:[]
-},
-{
- title:"paintings",
- x:0,y:0,scale:1,speed:0.01,
- items:[]
-},
-{
- title:"everythingelseyoushouldcareabout!",
- x:0,y:0,scale:1,speed:0.02,
- items:[]
-}
-];
-
-function openCollection(item){
-  collection.innerHTML="";
-  collection.style.display="block";
-
-  // feltöltő
-  let input=document.createElement("input");
-  input.type="file";
-  input.accept="image/*,video/*";
-  input.onchange=e=>{
-    let file=e.target.files[0];
-    let url=URL.createObjectURL(file);
-    let isVideo=file.type.startsWith("video");
-
-    item.items.push({
-      src:url,
-      isVideo:isVideo,
-      title:file.name,
-      desc:""
-    });
-
-    openCollection(item);
-  };
-
-  collection.appendChild(input);
-
-  item.items.forEach(el=>{
-    let div=document.createElement("div");
-    div.className="item";
-
-    let media=document.createElement(el.isVideo?"video":"img");
-    media.src=el.src;
-    if(el.isVideo) media.controls=true;
-
-    let p=document.createElement("p");
-    p.textContent=el.title;
-
-    div.appendChild(media);
-    div.appendChild(p);
-
-    div.onclick=()=>{
-      openViewer(el);
-    };
-
-    collection.appendChild(div);
-  });
-}
-
-function openViewer(el){
-  document.getElementById("viewer").style.display="flex";
-
-  if(el.isVideo){
-    vvid.src=el.src;
-    vvid.style.display="block";
-    vimg.style.display="none";
-  }else{
-    vimg.src=el.src;
-    vimg.style.display="block";
-    vvid.style.display="none";
+  body {
+    margin:0;
+    padding:0;
+    height:100vh;
+    background-color:#c2c8f6;
+    font-family: 'Baskerville eText', Times, serif;
+    overflow:hidden;
   }
 
-  vdesc.textContent=el.desc;
-}
+  canvas {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1;
+    pointer-events: none;
+  }
 
-function closeViewer(){
-  document.getElementById("viewer").style.display="none";
-}
+  h1#makacs, #menu, .art-item, .art-page {
+    z-index:2;
+    position:absolute;
+    width:100%;
+    text-align:center;
+    color:#772469;
+    margin:0;
+    font-family: 'Baskerville eText', Times, serif;
+  }
+
+  h1#makacs {
+    top:40%;
+    font-size:10vw;
+    cursor:pointer;
+    transition: transform 0.2s ease;
+  }
+  h1#makacs:hover {
+    transform: scale(1.2);
+  }
+
+  #menu {
+    display:none;
+    top:50%;
+    transform: translateY(-50%);
+  }
+  .menu-item {
+    font-size:3vw;
+    margin:20px 0;
+    text-transform: lowercase;
+    cursor:pointer;
+    transition: transform 0.2s ease;
+  }
+  .menu-item:hover { transform: scale(1.2); }
+
+  .art-item {
+    font-size:2vw;
+    text-transform: lowercase;
+    cursor:pointer;
+    animation: pulse 2s infinite ease-in-out;
+  }
+  .art-item.aggressive { animation: aggressivePulse 1s infinite ease-in-out; }
+
+  @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.1);} 100%{transform:scale(1);} }
+  @keyframes aggressivePulse {0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
+
+  .art-page {
+    display:none;
+    top:0; left:0;
+    width:100%; height:100%;
+    background-color:#c2c8f6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+  }
+  .art-page button {
+    margin-top:20px;
+    font-size:2vw;
+    padding:10px 20px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1 id="makacs">Makacs</h1>
+
+<div id="menu">
+  <h1 class="menu-item">about me</h1>
+  <h1 class="menu-item" id="my-art">my art</h1>
+  <h1 class="menu-item">contact</h1>
+</div>
+
+<!-- Art-címek -->
+<div id="art-items-container"></div>
+
+<script>
+  const makacs = document.getElementById('makacs');
+  const menu = document.getElementById('menu');
+  const artContainer = document.getElementById('art-items-container');
+
+  // Makacs felirat kattintás
+  makacs.addEventListener('click', () => {
+    makacs.style.display = 'none';
+    menu.style.display = 'block';
+  });
+
+  // My Art kattintás → art-címek
+  document.getElementById('my-art').addEventListener('click', () => {
+    const artItems = [
+      'photos',
+      'videos',
+      'paintings',
+      'makacs archive',
+      'everythingelseyoushouldcareabout!'
+    ];
+
+    artItems.forEach((text, index) => {
+      const el = document.createElement('h1');
+      el.className = 'art-item';
+      el.innerText = text;
+      // minden cím egyenesen középre, feljebb a "everythinges"
+      if(text === 'everythingelseyoushouldcareabout!') {
+        el.style.top = '10%';
+        el.classList.add('aggressive');
+      } else {
+        el.style.top = (20 + index*12) + '%';
+      }
+      el.style.left = '50%';
+      el.style.transform = 'translateX(-50%)';
+
+      artContainer.appendChild(el);
+
+      el.addEventListener('click', () => showArtPage(text));
+    });
+  });
+
+  function showArtPage(title) {
+    const page = document.createElement('div');
+    page.className = 'art-page';
+    page.innerHTML = `<div>${title}</div><button onclick="closeArtPage(this)">Vissza</button>`;
+    document.body.appendChild(page);
+    page.style.display = 'flex';
+  }
+
+  function closeArtPage(btn) {
+    btn.parentElement.remove();
+  }
 </script>
 
 <script>
-function setup(){
-  createCanvas(windowWidth,windowHeight);
-
-  stroke('#b46b9f');
-  strokeWeight(3);
-
-  artItems.forEach(i=>{
-    i.x=random(100,width-100);
-    i.y=random(height*0.2,height*0.85);
-  });
-}
-
-function draw(){
-
-  if(isDrawing && mouseIsPressed){
-    line(mouseX,mouseY,pmouseX,pmouseY);
+  // p5.js canvas rajzolás
+  let isDrawing = false;
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    background('#c2c8f6');
+    stroke('#b46b9f');
+    strokeWeight(3);
   }
-
-  if(showArt){
-    fill('#772469');
-    textAlign(CENTER,CENTER);
-    textSize(windowWidth*0.02);
-
-    artItems.forEach(i=>{
-      i.scale+=i.speed;
-      if(i.scale>1.05||i.scale<0.95) i.speed*=-1;
-
-      push();
-      translate(i.x,i.y);
-      scale(i.scale);
-      text(i.title,0,0);
-      pop();
-    });
+  function draw() {
+    if(isDrawing && mouseIsPressed) line(mouseX, mouseY, pmouseX, pmouseY);
   }
-}
-
-function mousePressed(){
-  isDrawing=true;
-
-  if(showArt){
-    artItems.forEach(i=>{
-      if(dist(mouseX,mouseY,i.x,i.y)<60){
-        openCollection(i);
-      }
-    });
-  }
-}
-
-function mouseReleased(){
-  isDrawing=false;
-}
+  function mousePressed() { isDrawing = true; }
+  function mouseReleased() { isDrawing = false; }
+  function windowResized() { resizeCanvas(windowWidth, windowHeight); }
 </script>
 
 </body>
 </html>
-
-
