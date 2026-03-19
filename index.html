@@ -5,100 +5,108 @@
 <title>Makacs</title>
 <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
 <link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
+
 <style>
-  body {
-    margin:0;
-    padding:0;
-    height:100vh;
-    background-color:#c2c8f6;
-    font-family: 'Baskerville eText', Times, serif;
-    overflow:hidden;
-  }
+body {
+  margin:0;
+  padding:0;
+  height:100vh;
+  background-color:#c2c8f6;
+  font-family: 'Baskerville eText', Times, serif;
+  overflow:hidden;
+}
 
-  canvas {
-    position:absolute;
-    top:0;
-    left:0;
-    z-index:1;
-    pointer-events: none;
-  }
+canvas {
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:1;
+  pointer-events: none;
+}
 
-  h1#makacs, #menu, .art-item, .art-page {
-    z-index:2;
-    position:absolute;
-    width:100%;
-    text-align:center;
-    color:#772469;
-    margin:0;
-    font-family: 'Baskerville eText', Times, serif;
-  }
+/* ❗ EZ VOLT A BAJ → kivettük a width:100%-t az art-itemből */
+h1#makacs, #menu, .art-page {
+  z-index:2;
+  position:absolute;
+  width:100%;
+  text-align:center;
+  color:#772469;
+  margin:0;
+}
 
-  h1#makacs {
-    top:40%;
-    font-size:10vw;
-    cursor:pointer;
-    transition: transform 0.2s ease;
-  }
-  h1#makacs:hover {
-    transform: scale(1.2);
-  }
+.art-item {
+  position:absolute;
+  z-index:2;
+  color:#772469;
+  margin:0;
+  font-size:2vw;
+  text-transform: lowercase;
+  cursor:pointer;
+  animation: pulse 2s infinite ease-in-out;
+}
 
-  #menu {
-    display:none;
-    top:50%;
-    transform: translateY(-50%);
-  }
+/* MAKACS */
+h1#makacs {
+  top:40%;
+  font-size:10vw;
+  cursor:pointer;
+  transition: transform 0.2s ease;
+}
+h1#makacs:hover {
+  transform: scale(1.2);
+}
 
-  .menu-item {
-    font-size:3vw;
-    margin:20px 0;
-    text-transform: lowercase;
-    cursor:pointer;
-    transition: transform 0.2s ease;
-  }
-  .menu-item:hover { transform: scale(1.2); }
+/* MENÜ */
+#menu {
+  display:none;
+  top:50%;
+  transform: translateY(-50%);
+}
 
-  .art-item {
-    font-size:2vw;
-    text-transform: lowercase;
-    cursor:pointer;
-    animation: pulse 2s infinite ease-in-out;
-    position:absolute;
-  }
+.menu-item {
+  font-size:3vw;
+  margin:20px 0;
+  text-transform: lowercase;
+  cursor:pointer;
+  transition: transform 0.2s ease;
+}
+.menu-item:hover { transform: scale(1.2); }
 
-  .art-item.aggressive {
-    animation: aggressivePulse 1s infinite ease-in-out;
-  }
+/* ANIM */
+.art-item.aggressive {
+  animation: aggressivePulse 1s infinite ease-in-out;
+}
 
-  @keyframes pulse {
-    0%{transform:scale(1);}
-    50%{transform:scale(1.1);}
-    100%{transform:scale(1);}
-  }
+@keyframes pulse {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
 
-  @keyframes aggressivePulse {
-    0%{transform:scale(1);}
-    50%{transform:scale(1.4);}
-    100%{transform:scale(1);}
-  }
+@keyframes aggressivePulse {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.4);}
+  100%{transform:scale(1);}
+}
 
-  .art-page {
-    display:none;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color:#c2c8f6;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction: column;
-  }
+/* ART PAGE */
+.art-page {
+  display:none;
+  top:0; left:0;
+  width:100%; height:100%;
+  background-color:#c2c8f6;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+}
 
-  .art-page button {
-    margin-top:20px;
-    font-size:2vw;
-    padding:10px 20px;
-    cursor:pointer;
-  }
+.art-page button {
+  margin-top:20px;
+  font-size:2vw;
+  padding:10px 20px;
+  cursor:pointer;
+}
 </style>
 </head>
 
@@ -119,12 +127,12 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-makacs.addEventListener('click', () => {
+makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
-});
+};
 
-document.getElementById('my-art').addEventListener('click', () => {
+document.getElementById('my-art').onclick = () => {
 
   artContainer.innerHTML = "";
 
@@ -150,12 +158,11 @@ document.getElementById('my-art').addEventListener('click', () => {
 
     let x, y;
 
-    // 🔥 addig generálunk, amíg nem ütközik a menüvel
     do {
-      x = Math.random() * (window.innerWidth - rect.width - padding*2) + padding;
-      y = Math.random() * (window.innerHeight - rect.height - padding*2) + padding;
+      x = Math.random() * (window.innerWidth - rect.width - padding);
+      y = Math.random() * (window.innerHeight - rect.height - padding);
     } while (
-      y > window.innerHeight * 0.35 && 
+      y > window.innerHeight * 0.35 &&
       y < window.innerHeight * 0.65
     );
 
@@ -168,20 +175,16 @@ document.getElementById('my-art').addEventListener('click', () => {
 
     el.style.visibility = "visible";
 
-    el.addEventListener('click', () => showArtPage(text));
+    el.onclick = () => showArtPage(text);
   });
-});
+};
 
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
-  page.innerHTML = `<div>${title}</div><button onclick="closeArtPage(this)">Vissza</button>`;
+  page.innerHTML = `<div>${title}</div><button onclick="this.parentElement.remove()">vissza</button>`;
   document.body.appendChild(page);
   page.style.display = 'flex';
-}
-
-function closeArtPage(btn) {
-  btn.parentElement.remove();
 }
 </script>
 
