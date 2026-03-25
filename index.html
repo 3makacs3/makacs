@@ -106,8 +106,8 @@ h1#makacs:hover { transform: scale(1.2); }
   cursor:pointer;
 }
 
-.media {margin-bottom:60px;}
-.media p {margin-top:10px; font-size:1.5vw;}
+.media { margin-bottom:60px; }
+.media p { margin-top:10px; font-size:1.5vw; }
 </style>
 </head>
 
@@ -129,19 +129,15 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-// 🔥 Ide írd a GitHub Pages nyilvános URL-ed mappáit:
-const githubBase = "https://username.github.io/repo-neve/";
-
+// Art tartalom, GitHub mappákból
 const artContent = {
   'photos': [
-    {type:'img', src:githubBase+'kepek/photo1.jpg', title:'Photo 1'}
+    {type:'img', src:'kepek/julius22yas.jpg', title:'Zombie with trees-2026'}
   ],
   'videos': [
-    {type:'video', src:githubBase+'videok/VLOG.mp4', title:'VLOG-2026'}
+    {type:'video', src:'videos/VLOG.mov', title:'VLOG-2026'}
   ],
-  'paintings': [
-    {type:'img', src:githubBase+'kepek/julius22yas.jpg', title:'Zombie with trees-2026'}
-  ],
+  'paintings': [],
   'makacs archive': [],
   'everythingelseyoushouldcareabout!': []
 };
@@ -152,7 +148,7 @@ makacs.onclick = () => {
   menu.style.display = 'block';
 };
 
-// menü go back
+// Menü go back
 document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
@@ -161,7 +157,6 @@ document.getElementById('go-back').onclick = () => {
 
 // My Art → art címek
 document.getElementById('my-art').onclick = () => {
-
   artContainer.innerHTML = "";
 
   const artItems = [
@@ -182,14 +177,10 @@ document.getElementById('my-art').onclick = () => {
     const rect = el.getBoundingClientRect();
     const padding = 20;
     let x, y;
-
     do {
       x = Math.random() * (window.innerWidth - rect.width - padding);
       y = Math.random() * (window.innerHeight - rect.height - padding);
-    } while (
-      y > window.innerHeight * 0.35 &&
-      y < window.innerHeight * 0.65
-    );
+    } while (y > window.innerHeight * 0.35 && y < window.innerHeight * 0.65);
 
     el.style.left = x + "px";
     el.style.top = y + "px";
@@ -199,15 +190,15 @@ document.getElementById('my-art').onclick = () => {
     }
 
     el.style.visibility = "visible";
-
     el.onclick = () => showArtPage(text);
   });
 };
 
-// Art Page
+// ART PAGE
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
+
   let content = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
     <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
@@ -216,11 +207,23 @@ function showArtPage(title) {
   const items = artContent[title];
   if(items && items.length > 0){
     items.forEach(item => {
-      if(item.type === 'img'){
-        content += `<div class="media"><img src="${item.src}" style="width:80%; display:block; margin:0 auto;"><p>${item.title}</p></div>`;
+      if(item.type === "img"){
+        content += `
+          <div class="media">
+            <img src="${item.src}" style="width:90%;">
+            <p>${item.title}</p>
+          </div>
+        `;
       }
-      if(item.type === 'video'){
-        content += `<div class="media"><video controls style="width:80%; display:block; margin:0 auto;"><source src="${item.src}" type="video/mp4"></video><p>${item.title}</p></div>`;
+      if(item.type === "video"){
+        content += `
+          <div class="media">
+            <video controls style="width:90%;">
+              <source src="${item.src}" type="video/mp4">
+            </video>
+            <p>${item.title}</p>
+          </div>
+        `;
       }
     });
   } else {
