@@ -48,30 +48,17 @@ h1#makacs, #menu, .art-page {
   animation: aggressivePulse 1s infinite ease-in-out;
 }
 
-@keyframes pulse {
-  0%{transform:scale(1);}
-  50%{transform:scale(1.1);}
-  100%{transform:scale(1);}
-}
+@keyframes pulse {0%{transform:scale(1);}50%{transform:scale(1.1);}100%{transform:scale(1);}}
+@keyframes aggressivePulse {0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
 
-@keyframes aggressivePulse {
-  0%{transform:scale(1);}
-  50%{transform:scale(1.4);}
-  100%{transform:scale(1);}
-}
-
-/* MAKACS */
 h1#makacs {
   top:40%;
   font-size:10vw;
   cursor:pointer;
   transition: transform 0.2s ease;
 }
-h1#makacs:hover {
-  transform: scale(1.2);
-}
+h1#makacs:hover { transform: scale(1.2); }
 
-/* MENÜ */
 #menu {
   display:none;
   top:50%;
@@ -87,21 +74,17 @@ h1#makacs:hover {
 }
 .menu-item:hover { transform: scale(1.2); }
 
-/* 🔥 lebegő back gomb */
 .floating-back {
   position:fixed;
   top:20px;
   left:30px;
-  font-size:2vw;
+  font-size:3vw;
   cursor:pointer;
   z-index:5;
   transition: transform 0.2s ease;
 }
-.floating-back:hover {
-  transform: scale(1.2);
-}
+.floating-back:hover { transform: scale(1.2); }
 
-/* ART PAGE */
 .art-page {
   display:none;
   top:0; left:0;
@@ -123,14 +106,8 @@ h1#makacs:hover {
   cursor:pointer;
 }
 
-/* MEDIA */
-.media {
-  margin-bottom:60px;
-}
-.media p {
-  margin-top:10px;
-  font-size:1.5vw;
-}
+.media {margin-bottom:60px;}
+.media p {margin-top:10px; font-size:1.5vw;}
 </style>
 </head>
 
@@ -152,17 +129,19 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-// 🔥 ÚJ: külön tartalom
+// 🔥 Ide írd a GitHub Pages nyilvános URL-ed mappáit:
+const githubBase = "https://username.github.io/repo-neve/";
+
 const artContent = {
   'photos': [
-    {type:'img', src:'jpg', title:''}
+    {type:'img', src:githubBase+'kepek/photo1.jpg', title:'Photo 1'}
   ],
   'videos': [
-    {type:'video', src:'videok/VLOG.mov', title:'VLOG-2026'}
+    {type:'video', src:githubBase+'videok/VLOG.mp4', title:'VLOG-2026'}
   ],
   'paintings': [
-  {type:'img', src:'kepek/julius22yas.jpg', title:'Zombie with trees-2026'}
-               ],
+    {type:'img', src:githubBase+'kepek/julius22yas.jpg', title:'Zombie with trees-2026'}
+  ],
   'makacs archive': [],
   'everythingelseyoushouldcareabout!': []
 };
@@ -194,17 +173,14 @@ document.getElementById('my-art').onclick = () => {
   ];
 
   artItems.forEach((text) => {
-
     const el = document.createElement('h1');
     el.className = 'art-item';
     el.innerText = text;
-
     el.style.visibility = "hidden";
     artContainer.appendChild(el);
 
     const rect = el.getBoundingClientRect();
     const padding = 20;
-
     let x, y;
 
     do {
@@ -228,48 +204,30 @@ document.getElementById('my-art').onclick = () => {
   });
 };
 
-// 🔥 csak EZ lett okosabb
+// Art Page
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
-
   let content = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
     <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
   `;
 
   const items = artContent[title];
-
   if(items && items.length > 0){
     items.forEach(item => {
-
-      if(item.type === "img"){
-        content += `
-          <div class="media">
-            <img src="${item.src}" style="width:100%;">
-            <p>${item.title}</p>
-          </div>
-        `;
+      if(item.type === 'img'){
+        content += `<div class="media"><img src="${item.src}" style="width:80%; display:block; margin:0 auto;"><p>${item.title}</p></div>`;
       }
-
-      if(item.type === "video"){
-        content += `
-          <div class="media">
-            <video controls style="width:100%;">
-              <source src="${item.src}" type="video/mp4">
-            </video>
-            <p>${item.title}</p>
-          </div>
-        `;
+      if(item.type === 'video'){
+        content += `<div class="media"><video controls style="width:80%; display:block; margin:0 auto;"><source src="${item.src}" type="video/mp4"></video><p>${item.title}</p></div>`;
       }
-
     });
   } else {
     content += `<p>nincs még tartalom</p>`;
   }
 
   page.innerHTML = content;
-
   document.body.appendChild(page);
   page.style.display = 'block';
 }
