@@ -87,6 +87,20 @@ h1#makacs:hover {
 }
 .menu-item:hover { transform: scale(1.2); }
 
+/* 🔥 lebegő back gomb */
+.floating-back {
+  position:fixed;
+  top:20px;
+  left:30px;
+  font-size:2vw;
+  cursor:pointer;
+  z-index:5;
+  transition: transform 0.2s ease;
+}
+.floating-back:hover {
+  transform: scale(1.2);
+}
+
 /* ART PAGE */
 .art-page {
   display:none;
@@ -128,6 +142,7 @@ h1#makacs:hover {
   <h1 class="menu-item">about me</h1>
   <h1 class="menu-item" id="my-art">my art</h1>
   <h1 class="menu-item">contact</h1>
+  <h1 class="menu-item" id="go-back">go back</h1>
 </div>
 
 <div id="art-items-container"></div>
@@ -137,14 +152,22 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-// Makacs kattintás
+// Makacs → menü
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
-// My Art kattintás → art-címek random helyen, nem takarják a menüt
+// menü go back
+document.getElementById('go-back').onclick = () => {
+  menu.style.display = 'none';
+  artContainer.innerHTML = "";
+  makacs.style.display = 'block';
+};
+
+// My Art → art címek
 document.getElementById('my-art').onclick = () => {
+
   artContainer.innerHTML = "";
 
   const artItems = [
@@ -169,13 +192,12 @@ document.getElementById('my-art').onclick = () => {
 
     let x, y;
 
-    // generálás random, de nem a menü területére
     do {
       x = Math.random() * (window.innerWidth - rect.width - padding);
       y = Math.random() * (window.innerHeight - rect.height - padding);
     } while (
       y > window.innerHeight * 0.35 &&
-      y < window.innerHeight * 0.65 // menü ne legyen takarva
+      y < window.innerHeight * 0.65
     );
 
     el.style.left = x + "px";
@@ -191,15 +213,16 @@ document.getElementById('my-art').onclick = () => {
   });
 };
 
-// Art page generálás scrollal és feltöltés helyének jelzése
+// 🔥 ART PAGE + lebegő back
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
 
   page.innerHTML = `
+    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+
     <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
 
-    <!-- IDE TUDSZ KÉPET/VIDEÓT HOZZÁADNI -->
     <div class="media">
       <img src="https://via.placeholder.com/600x400" style="width:100%;">
       <p>példa kép</p>
@@ -211,8 +234,6 @@ function showArtPage(title) {
       </video>
       <p>példa videó</p>
     </div>
-
-    <button onclick="this.closest('.art-page').remove()">vissza</button>
   `;
 
   document.body.appendChild(page);
@@ -220,7 +241,6 @@ function showArtPage(title) {
 }
 </script>
 
-<!-- p5.js canvas rajzolás -->
 <script>
 let isDrawing = false;
 
