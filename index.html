@@ -60,14 +60,18 @@ h1#makacs, #menu, .art-page {
   100%{transform:scale(1);}
 }
 
+/* MAKACS */
 h1#makacs {
   top:40%;
   font-size:10vw;
   cursor:pointer;
   transition: transform 0.2s ease;
 }
-h1#makacs:hover { transform: scale(1.2); }
+h1#makacs:hover {
+  transform: scale(1.2);
+}
 
+/* MENÜ */
 #menu {
   display:none;
   top:50%;
@@ -83,7 +87,7 @@ h1#makacs:hover { transform: scale(1.2); }
 }
 .menu-item:hover { transform: scale(1.2); }
 
-/* lebegő back */
+/* 🔥 lebegő back gomb */
 .floating-back {
   position:fixed;
   top:20px;
@@ -97,23 +101,31 @@ h1#makacs:hover { transform: scale(1.2); }
   transform: scale(1.2);
 }
 
+/* ART PAGE */
 .art-page {
   display:none;
   top:0; left:0;
   width:100%; height:100%;
   background-color:#c2c8f6;
   display:flex;
+  justify-content:center;
+  align-items:flex-start;
   flex-direction: column;
   overflow-y:auto;
   padding:50px;
   box-sizing:border-box;
 }
 
+.art-page button {
+  margin-top:50px;
+  font-size:2vw;
+  padding:10px 20px;
+  cursor:pointer;
+}
+
+/* MEDIA */
 .media {
   margin-bottom:60px;
-}
-.media img, .media video {
-  width:100%;
 }
 .media p {
   margin-top:10px;
@@ -140,11 +152,10 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-// 🔥 ÚJ: külön tartalom kategóriánként
+// 🔥 ÚJ: külön tartalom
 const artContent = {
   'photos': [
-    {type:'img', src:'kepek/kep1.jpg', title:'első kép'},
-    {type:'img', src:'kepek/kep2.jpg', title:'második kép'}
+    {type:'img', src:'kepek/kep1.jpg', title:'első kép'}
   ],
   'videos': [
     {type:'video', src:'videok/video1.mp4', title:'videó'}
@@ -154,20 +165,20 @@ const artContent = {
   'everythingelseyoushouldcareabout!': []
 };
 
-// Makacs kattintás
+// Makacs → menü
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
-// go back (menü)
+// menü go back
 document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
   makacs.style.display = 'block';
 };
 
-// My Art
+// My Art → art címek
 document.getElementById('my-art').onclick = () => {
 
   artContainer.innerHTML = "";
@@ -215,13 +226,15 @@ document.getElementById('my-art').onclick = () => {
   });
 };
 
-// 🔥 EZ lett kiegészítve (nem átírva)
+// 🔥 csak EZ lett okosabb
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
 
-  let html = `<div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>`;
-  html += `<h1 style="font-size:4vw; margin-bottom:50px;">${title}</h1>`;
+  let content = `
+    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
+  `;
 
   const items = artContent[title];
 
@@ -229,18 +242,18 @@ function showArtPage(title) {
     items.forEach(item => {
 
       if(item.type === "img"){
-        html += `
+        content += `
           <div class="media">
-            <img src="${item.src}">
+            <img src="${item.src}" style="width:100%;">
             <p>${item.title}</p>
           </div>
         `;
       }
 
       if(item.type === "video"){
-        html += `
+        content += `
           <div class="media">
-            <video controls>
+            <video controls style="width:100%;">
               <source src="${item.src}" type="video/mp4">
             </video>
             <p>${item.title}</p>
@@ -250,10 +263,10 @@ function showArtPage(title) {
 
     });
   } else {
-    html += `<p>nincs még tartalom</p>`;
+    content += `<p>nincs még tartalom</p>`;
   }
 
-  page.innerHTML = html;
+  page.innerHTML = content;
 
   document.body.appendChild(page);
   page.style.display = 'block';
@@ -286,5 +299,3 @@ function windowResized() {
 
 </body>
 </html>
-
-  
