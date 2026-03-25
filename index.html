@@ -37,7 +37,9 @@ h1#makacs, #menu, .art-page {
   position:absolute;
   z-index:2;
   color:#772469;
+  margin:0;
   font-size:2vw;
+  text-transform: lowercase;
   cursor:pointer;
   animation: pulse 2s infinite ease-in-out;
 }
@@ -62,6 +64,7 @@ h1#makacs {
   top:40%;
   font-size:10vw;
   cursor:pointer;
+  transition: transform 0.2s ease;
 }
 h1#makacs:hover { transform: scale(1.2); }
 
@@ -74,16 +77,24 @@ h1#makacs:hover { transform: scale(1.2); }
 .menu-item {
   font-size:3vw;
   margin:20px 0;
+  text-transform: lowercase;
   cursor:pointer;
+  transition: transform 0.2s ease;
 }
 .menu-item:hover { transform: scale(1.2); }
 
+/* lebegő back */
 .floating-back {
   position:fixed;
   top:20px;
   left:30px;
   font-size:2vw;
   cursor:pointer;
+  z-index:5;
+  transition: transform 0.2s ease;
+}
+.floating-back:hover {
+  transform: scale(1.2);
 }
 
 .art-page {
@@ -91,8 +102,11 @@ h1#makacs:hover { transform: scale(1.2); }
   top:0; left:0;
   width:100%; height:100%;
   background-color:#c2c8f6;
+  display:flex;
+  flex-direction: column;
   overflow-y:auto;
   padding:50px;
+  box-sizing:border-box;
 }
 
 .media {
@@ -100,6 +114,10 @@ h1#makacs:hover { transform: scale(1.2); }
 }
 .media img, .media video {
   width:100%;
+}
+.media p {
+  margin-top:10px;
+  font-size:1.5vw;
 }
 </style>
 </head>
@@ -122,58 +140,63 @@ const makacs = document.getElementById('makacs');
 const menu = document.getElementById('menu');
 const artContainer = document.getElementById('art-items-container');
 
-// 🔥 IDE ÍROD A TARTALMAT
+// 🔥 ÚJ: külön tartalom kategóriánként
 const artContent = {
-  "photos": [
-    {type:"img", src:"kepek/kep1.jpg", title:"első kép"},
-    {type:"img", src:"kepek/kep2.jpg", title:"második kép"}
+  'photos': [
+    {type:'img', src:'kepek/kep1.jpg', title:'első kép'},
+    {type:'img', src:'kepek/kep2.jpg', title:'második kép'}
   ],
-
-  "videos": [
-    {type:"video", src:"videok/video1.mp4", title:"videó 1"}
+  'videos': [
+    {type:'video', src:'videok/video1.mp4', title:'videó'}
   ],
-
-  "paintings": [
-    {type:"img", src:"kepek/paint1.jpg", title:"festmény"}
-  ],
-
-  "makacs archive": [],
-  "everythingelseyoushouldcareabout!": []
+  'paintings': [],
+  'makacs archive': [],
+  'everythingelseyoushouldcareabout!': []
 };
 
-// Makacs → menü
+// Makacs kattintás
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
-// go back
+// go back (menü)
 document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
   makacs.style.display = 'block';
 };
 
-// art címek
+// My Art
 document.getElementById('my-art').onclick = () => {
 
   artContainer.innerHTML = "";
 
-  Object.keys(artContent).forEach((text) => {
+  const artItems = [
+    'photos',
+    'videos',
+    'paintings',
+    'makacs archive',
+    'everythingelseyoushouldcareabout!'
+  ];
+
+  artItems.forEach((text) => {
 
     const el = document.createElement('h1');
     el.className = 'art-item';
     el.innerText = text;
 
+    el.style.visibility = "hidden";
     artContainer.appendChild(el);
 
     const rect = el.getBoundingClientRect();
+    const padding = 20;
 
     let x, y;
 
     do {
-      x = Math.random() * (window.innerWidth - rect.width);
-      y = Math.random() * (window.innerHeight - rect.height);
+      x = Math.random() * (window.innerWidth - rect.width - padding);
+      y = Math.random() * (window.innerHeight - rect.height - padding);
     } while (
       y > window.innerHeight * 0.35 &&
       y < window.innerHeight * 0.65
@@ -186,44 +209,52 @@ document.getElementById('my-art').onclick = () => {
       el.classList.add('aggressive');
     }
 
+    el.style.visibility = "visible";
+
     el.onclick = () => showArtPage(text);
   });
 };
 
-// 🔥 oldal generálás
+// 🔥 EZ lett kiegészítve (nem átírva)
 function showArtPage(title) {
-
   const page = document.createElement('div');
   page.className = 'art-page';
 
-  let contentHTML = `<div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>`;
-  contentHTML += `<h1 style="font-size:4vw;">${title}</h1>`;
+  let html = `<div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>`;
+  html += `<h1 style="font-size:4vw; margin-bottom:50px;">${title}</h1>`;
 
   const items = artContent[title];
 
-  items.forEach(item => {
-    if(item.type === "img"){
-      contentHTML += `
-        <div class="media">
-          <img src="${item.src}">
-          <p>${item.title}</p>
-        </div>
-      `;
-    }
+  if(items && items.length > 0){
+    items.forEach(item => {
 
-    if(item.type === "video"){
-      contentHTML += `
-        <div class="media">
-          <video controls>
-            <source src="${item.src}" type="video/mp4">
-          </video>
-          <p>${item.title}</p>
-        </div>
-      `;
-    }
-  });
+      if(item.type === "img"){
+        html += `
+          <div class="media">
+            <img src="${item.src}">
+            <p>${item.title}</p>
+          </div>
+        `;
+      }
 
-  page.innerHTML = contentHTML;
+      if(item.type === "video"){
+        html += `
+          <div class="media">
+            <video controls>
+              <source src="${item.src}" type="video/mp4">
+            </video>
+            <p>${item.title}</p>
+          </div>
+        `;
+      }
+
+    });
+  } else {
+    html += `<p>nincs még tartalom</p>`;
+  }
+
+  page.innerHTML = html;
+
   document.body.appendChild(page);
   page.style.display = 'block';
 }
@@ -236,6 +267,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background('#c2c8f6');
   stroke('#b46b9f');
+  strokeWeight(3);
 }
 
 function draw() {
@@ -254,3 +286,5 @@ function windowResized() {
 
 </body>
 </html>
+
+  
