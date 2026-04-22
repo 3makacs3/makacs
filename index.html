@@ -98,7 +98,7 @@ h1#makacs:hover { transform: scale(1.2); }
 <div id="menu">
   <h1 class="menu-item">about me</h1>
   <h1 class="menu-item" id="my-art">my art</h1>
-  <h1 class="menu-item">contact</h1>
+  <h1 class="menu-item" id="contact">contact</h1>
   <h1 class="menu-item" id="go-back">go back</h1>
 </div>
 
@@ -114,21 +114,20 @@ const artContainer = document.getElementById('art-items-container');
 const artContent = {
   'photos': [],
 
-  'videos': [
-  ],
+  'videos': [],
 
   'paintings': [
     {type:'img', src:GITHUB_BASE + 'helyek1.jpg', title:''},
     {type:'img', src:GITHUB_BASE + 'helyek2.jpg', title:''},
     {type:'img', src:GITHUB_BASE + 'helyek3.jpg', title:'Helyek, amik már voltam.-2025'},
     {type:'img', src:GITHUB_BASE + 'julius22yas.jpg', title:'Zombie with trees-2026'},
-     {type:'img', src:GITHUB_BASE + 'zsofikaviszlat.jpg', title:'Zsófika kollab-2026'}
+    {type:'img', src:GITHUB_BASE + 'zsofikaviszlat.jpg', title:'Zsófika kollab-2026'}
   ],
 
   'makacs archive': [],
-  'everythingelseyoushouldcareabout!': [ 
+  'everythingelseyoushouldcareabout!': [
     {type:'img', src:GITHUB_BASE + 'tablo.jpg', title:'VAD-2025'}
-                                       ],
+  ],
 };
 
 // Makacs → Menü
@@ -142,6 +141,26 @@ document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
   makacs.style.display = 'block';
+};
+
+// 🔥 CONTACT (csak ez az új rész)
+document.getElementById('contact').onclick = () => {
+  const page = document.createElement('div');
+  page.className = 'art-page';
+
+  page.innerHTML = `
+    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+
+    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
+
+    <div style="text-align:center; font-size:2vw; line-height:2;">
+      <p>instagram: <a href="https://instagram.com/YOURUSERNAME" target="_blank">@YOURUSERNAME</a></p>
+      <p>email: <a href="mailto:youremail@gmail.com">youremail@gmail.com</a></p>
+    </div>
+  `;
+
+  document.body.appendChild(page);
+  page.style.display = 'block';
 };
 
 // My Art → random art címek
