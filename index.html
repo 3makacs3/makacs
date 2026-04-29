@@ -171,7 +171,7 @@ document.getElementById('contact').onclick = () => {
 
       <a href="https://instagram.com/111karmakamra" target="_blank">
         <img src="${GITHUB_BASE}instagram.png"
-          style="width:200px; cursor:pointer; transition:transform 0.2s ease;"
+          style="width:210px; cursor:pointer; transition:transform 0.2s ease;"
           onmouseover="this.style.transform='scale(1.2)'"
           onmouseout="this.style.transform='scale(1)'">
       </a>
@@ -191,7 +191,22 @@ document.getElementById('contact').onclick = () => {
 };
 
 // ABOUT ME
-document.querySelectorAll('.menu-item')[0].onclick = () => {
+
+
+// MY ART
+document.getElementById('my-art').onclick = () => {
+  artContainer.innerHTML = "";
+
+  Object.keys(artContent).forEach(text => {
+    const el = document.createElement('h1');
+    el.className = 'art-item';
+    el.innerText = text;
+
+    el.style.visibility = "hidden";
+    artContainer.appendChild(el);
+const aboutBtn = document.querySelector('.menu-item');
+
+aboutBtn.onclick = () => {
   const page = document.createElement('div');
   page.className = 'about-page';
 
@@ -205,19 +220,6 @@ document.querySelectorAll('.menu-item')[0].onclick = () => {
 
   document.body.appendChild(page);
 };
-
-// MY ART
-document.getElementById('my-art').onclick = () => {
-  artContainer.innerHTML = "";
-
-  Object.keys(artContent).forEach(text => {
-    const el = document.createElement('h1');
-    el.className = 'art-item';
-    el.innerText = text;
-
-    el.style.visibility = "hidden";
-    artContainer.appendChild(el);
-
     const rect = el.getBoundingClientRect();
 
     let x = Math.random() * (window.innerWidth - rect.width);
