@@ -8,8 +8,17 @@
 
 <style>
 body { margin:0; padding:0; height:100vh; background-color:#c2c8f6; font-family: 'Baskerville eText', Times, serif; overflow:hidden; }
-canvas { position:absolute; top:0; left:0; z-index:1; pointer-events: none; }
-h1#makacs, #menu, .art-page { z-index:2; position:absolute; width:100%; text-align:center; color:#772469; margin:0; }
+
+canvas { position:absolute; top:0; left:0; z-index:1; pointer-events:none; }
+
+h1#makacs, #menu, .art-page {
+  z-index:2;
+  position:absolute;
+  width:100%;
+  text-align:center;
+  color:#772469;
+  margin:0;
+}
 
 .art-item {
   position:absolute;
@@ -22,7 +31,10 @@ h1#makacs, #menu, .art-page { z-index:2; position:absolute; width:100%; text-ali
   animation: pulse 2s infinite ease-in-out;
 }
 
-.art-item.aggressive { animation: aggressivePulse 1s infinite ease-in-out; }
+.art-item.aggressive {
+  animation: aggressivePulse 0.6s infinite ease-in-out;
+  font-size:2.6vw;
+}
 
 @keyframes pulse {
   0%{transform:scale(1);}
@@ -86,31 +98,6 @@ h1#makacs:hover { transform: scale(1.2); }
 
 .media { margin-bottom:60px; }
 .media p { margin-top:10px; font-size:1.5vw; }
-
-.about-page {
-  position:absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  z-index:10;
-  background:black;
-}
-
-.about-page img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.about-text {
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  color:white;
-  font-size:5vw;
-  text-align:center;
-  pointer-events:none;
-}
 </style>
 </head>
 
@@ -150,20 +137,20 @@ const artContent = {
   ],
 };
 
-// MAKACS
+// Makacs → Menü
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
-// GO BACK
+// Go back
 document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
   makacs.style.display = 'block';
 };
 
-// CONTACT (FIXED)
+// CONTACT (FIX + CENTER + HOVER)
 document.getElementById('contact').onclick = () => {
   const page = document.createElement('div');
   page.className = 'art-page';
@@ -173,14 +160,29 @@ document.getElementById('contact').onclick = () => {
 
     <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
 
-    <div style="text-align:center;">
+    <div style="
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:80px;
+      width:100%;
+      margin-top:80px;
+    ">
+
       <a href="https://instagram.com/111karmakamra" target="_blank">
-        <img style="width:80px; margin:20px;" src="${GITHUB_BASE}instagram.png">
+        <img src="${GITHUB_BASE}instagram.png"
+          style="width:160px; cursor:pointer; transition:transform 0.2s ease;"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'">
       </a>
 
       <a href="mailto:varadixlena@gmail.com">
-        <img style="width:80px; margin:20px;" src="${GITHUB_BASE}email.png">
+        <img src="${GITHUB_BASE}email.png"
+          style="width:160px; cursor:pointer; transition:transform 0.2s ease;"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'">
       </a>
+
     </div>
   `;
 
@@ -188,15 +190,14 @@ document.getElementById('contact').onclick = () => {
   page.style.display = 'block';
 };
 
-// ABOUT
+// ABOUT ME
 document.querySelectorAll('.menu-item')[0].onclick = () => {
   const page = document.createElement('div');
-  page.className = 'about-page';
+  page.className = 'art-page';
 
   page.innerHTML = `
-    <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
-    <img src="${GITHUB_BASE}DSC07013.JPG">
-    <div class="about-text">THIS IS WHERE I CAME FROM!</div>
+    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+    <h1>ABOUT ME</h1>
   `;
 
   document.body.appendChild(page);
@@ -205,9 +206,8 @@ document.querySelectorAll('.menu-item')[0].onclick = () => {
 // MY ART
 document.getElementById('my-art').onclick = () => {
   artContainer.innerHTML = "";
-  const artItems = Object.keys(artContent);
 
-  artItems.forEach(text => {
+  Object.keys(artContent).forEach(text => {
     const el = document.createElement('h1');
     el.className = 'art-item';
     el.innerText = text;
@@ -216,18 +216,18 @@ document.getElementById('my-art').onclick = () => {
     artContainer.appendChild(el);
 
     const rect = el.getBoundingClientRect();
-    const padding = 20;
 
-    let x, y;
-    do {
-      x = Math.random() * (window.innerWidth - rect.width - padding);
-      y = Math.random() * (window.innerHeight - rect.height - padding);
-    } while (y > window.innerHeight * 0.35 && y < window.innerHeight * 0.65);
+    let x = Math.random() * (window.innerWidth - rect.width);
+    let y = Math.random() * (window.innerHeight - rect.height);
 
     el.style.left = x + "px";
     el.style.top = y + "px";
-
     el.style.visibility = "visible";
+
+    if(text === 'everythingelseyoushouldcareabout!'){
+      el.classList.add('aggressive');
+    }
+
     el.onclick = () => showArtPage(text);
   });
 };
@@ -239,22 +239,22 @@ function showArtPage(title) {
 
   let content = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
+    <h1>${title}</h1>
   `;
 
   const items = artContent[title];
 
-  if(items){
+  if(items && items.length){
     items.forEach(item => {
-      content += `
-        <div class="media">
-          <img src="${item.src}" style="width:80%;">
-          <p>${item.title}</p>
-        </div>
-      `;
+      if(item.type === "img"){
+        content += `
+          <div class="media">
+            <img src="${item.src}" style="width:80%;">
+            <p>${item.title}</p>
+          </div>
+        `;
+      }
     });
-  } else {
-    content += `<p>nincs még tartalom</p>`;
   }
 
   page.innerHTML = content;
@@ -266,14 +266,14 @@ function showArtPage(title) {
 <script>
 let isDrawing = false;
 
-function setup() {
+function setup(){
   createCanvas(windowWidth, windowHeight);
   background('#c2c8f6');
   stroke('#b46b9f');
   strokeWeight(3);
 }
 
-function draw() {
+function draw(){
   if(isDrawing && mouseIsPressed){
     line(mouseX, mouseY, pmouseX, pmouseY);
   }
