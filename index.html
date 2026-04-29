@@ -3,22 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Makacs</title>
-
 <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
 <link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
 
 <style>
 body { margin:0; padding:0; height:100vh; background-color:#c2c8f6; font-family: 'Baskerville eText', Times, serif; overflow:hidden; }
 canvas { position:absolute; top:0; left:0; z-index:1; pointer-events: none; }
-
-h1#makacs, #menu, .art-page {
-  z-index:2;
-  position:absolute;
-  width:100%;
-  text-align:center;
-  color:#772469;
-  margin:0;
-}
+h1#makacs, #menu, .art-page { z-index:2; position:absolute; width:100%; text-align:center; color:#772469; margin:0; }
 
 .art-item {
   position:absolute;
@@ -29,11 +20,6 @@ h1#makacs, #menu, .art-page {
   text-transform: lowercase;
   cursor:pointer;
   animation: pulse 2s infinite ease-in-out;
-  transition: transform 0.2s ease;
-}
-
-.art-item:hover {
-  transform: scale(1.2);
 }
 
 .art-item.aggressive {
@@ -103,13 +89,11 @@ h1#makacs:hover { transform: scale(1.2); }
 .media { margin-bottom:60px; }
 .media p { margin-top:10px; font-size:1.5vw; }
 
-/* ABOUT */
+/* 🔥 ABOUT PAGE (ÚJ) */
 .about-page {
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   z-index:10;
   background:black;
 }
@@ -130,18 +114,6 @@ h1#makacs:hover { transform: scale(1.2); }
   text-align:center;
   pointer-events:none;
 }
-
-/* CONTACT ICONS */
-.contact-icon {
-  width:120px;
-  margin:20px;
-  cursor:pointer;
-  transition: transform 0.2s ease;
-}
-
-.contact-icon:hover {
-  transform: scale(1.2);
-}
 </style>
 </head>
 
@@ -159,7 +131,6 @@ h1#makacs:hover { transform: scale(1.2); }
 <div id="art-items-container"></div>
 
 <script>
-
 const GITHUB_BASE = "https://3makacs3.github.io/makacs/";
 
 const makacs = document.getElementById('makacs');
@@ -168,7 +139,9 @@ const artContainer = document.getElementById('art-items-container');
 
 const artContent = {
   'photos': [],
+
   'videos': [],
+
   'paintings': [
     {type:'img', src:GITHUB_BASE + 'helyek1.jpg', title:''},
     {type:'img', src:GITHUB_BASE + 'helyek2.jpg', title:''},
@@ -176,53 +149,77 @@ const artContent = {
     {type:'img', src:GITHUB_BASE + 'julius22yas.jpg', title:'Zombie with trees-2026'},
     {type:'img', src:GITHUB_BASE + 'zsofikaviszlat.jpg', title:'Zsófika kollab-2026'}
   ],
+
   'makacs archive': [],
   'everythingelseyoushouldcareabout!': [
     {type:'img', src:GITHUB_BASE + 'tablo.jpg', title:'VAD-2025'}
   ],
 };
 
-// MAKACS
+// Makacs → Menü
 makacs.onclick = () => {
   makacs.style.display = 'none';
   menu.style.display = 'block';
 };
 
-// GO BACK
+// Menü go back
 document.getElementById('go-back').onclick = () => {
   menu.style.display = 'none';
   artContainer.innerHTML = "";
   makacs.style.display = 'block';
 };
 
-// CONTACT (FIXED)
-document.getElementById('contact').onclick = () => {
-  const page = document.createElement('div');
-  page.className = 'art-page';
+// 🔥 CONTACT
+document.addEventListener("DOMContentLoaded", () => {
 
-  page.innerHTML = `
-    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+  const contactBtn = document.getElementById('contact');
 
-    <h1 style="font-size:4vw;">contact</h1>
+  if (!contactBtn) return;
 
-    <div style="text-align:center;">
+  contactBtn.onclick = () => {
+    const page = document.createElement('div');
+    page.className = 'art-page';
 
-      <a href="https://instagram.com/111karmakamra" target="_blank">
-        <img class="contact-icon" src="${GITHUB_BASE}insta.png">
-      </a>
+    page.innerHTML = `
+      <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
 
-      <a href="mailto:varadixlena@gmail.com">
-        <img class="contact-icon" src="${GITHUB_BASE}email.png">
-      </a>
+      <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
 
-    </div>
-  `;
+      <div style="text-align:center;">
+
+        <a href="https://instagram.com/111karmakamra" target="_blank">
+          <img class="contact-icon" src="${GITHUB_BASE}insta.png">
+        </a>
+
+        <a href="mailto:varadixlena@gmail.com">
+          <img class="contact-icon" src="${GITHUB_BASE}email.png">
+        </a>
+
+      </div>
+    `;
+
+    document.body.appendChild(page);
+    page.style.display = 'block';
+  };
+
+});
 
   document.body.appendChild(page);
   page.style.display = 'block';
 };
 
-// ABOUT
+  document.body.appendChild(page);
+  page.style.display = 'block';
+};
+  document.body.appendChild(page);
+  page.style.display = 'block';
+};
+
+  document.body.appendChild(page);
+  page.style.display = 'block';
+};
+
+// 🔥 ABOUT ME (ÚJ)
 document.querySelectorAll('.menu-item')[0].onclick = () => {
   const page = document.createElement('div');
   page.className = 'about-page';
@@ -230,56 +227,89 @@ document.querySelectorAll('.menu-item')[0].onclick = () => {
   page.innerHTML = `
     <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
     <img src="${GITHUB_BASE}DSC07013.JPG">
-    <div class="about-text">THIS IS WHERE I CAME FROM!</div>
+    <div class="about-text">
+      THIS IS WHERE I CAME FROM!
+    </div>
   `;
 
   document.body.appendChild(page);
 };
 
-// ART MENU
+// My Art → random art címek
 document.getElementById('my-art').onclick = () => {
   artContainer.innerHTML = "";
 
-  Object.keys(artContent).forEach(text => {
+  const artItems = Object.keys(artContent);
+
+  artItems.forEach(text => {
     const el = document.createElement('h1');
     el.className = 'art-item';
     el.innerText = text;
 
-    el.style.left = Math.random() * window.innerWidth + "px";
-    el.style.top = Math.random() * window.innerHeight + "px";
+    el.style.visibility = "hidden";
+    artContainer.appendChild(el);
+
+    const rect = el.getBoundingClientRect();
+    const padding = 20;
+
+    let x, y;
+
+    do {
+      x = Math.random() * (window.innerWidth - rect.width - padding);
+      y = Math.random() * (window.innerHeight - rect.height - padding);
+    } while (
+      y > window.innerHeight * 0.35 &&
+      y < window.innerHeight * 0.65
+    );
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
 
     if(text === 'everythingelseyoushouldcareabout!'){
       el.classList.add('aggressive');
     }
 
-    el.onclick = () => showArtPage(text);
+    el.style.visibility = "visible";
 
-    artContainer.appendChild(el);
+    el.onclick = () => showArtPage(text);
   });
 };
 
-// ART PAGE
+// Art Page
 function showArtPage(title) {
   const page = document.createElement('div');
   page.className = 'art-page';
 
   let content = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-    <h1 style="font-size:4vw;">${title}</h1>
+    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">${title}</h1>
   `;
 
   const items = artContent[title];
 
-  if(items && items.length){
-    items.forEach(i=>{
-      if(i.type === "img"){
+  if(items && items.length > 0){
+    items.forEach(item => {
+
+      if(item.type === "img"){
         content += `
           <div class="media">
-            <img src="${i.src}" style="width:80%">
-            <p>${i.title}</p>
+            <img src="${item.src}" style="width:80%;">
+            <p>${item.title}</p>
           </div>
         `;
       }
+
+      if(item.type === "video"){
+        content += `
+          <div class="media">
+            <video controls style="width:80%;">
+              <source src="${item.src}" type="video/mp4">
+            </video>
+            <p>${item.title}</p>
+          </div>
+        `;
+      }
+
     });
   } else {
     content += `<p>nincs még tartalom</p>`;
@@ -289,30 +319,30 @@ function showArtPage(title) {
   document.body.appendChild(page);
   page.style.display = 'block';
 }
+</script>
 
-// DRAW
+<script>
 let isDrawing = false;
 
-function setup(){
+function setup() {
   createCanvas(windowWidth, windowHeight);
   background('#c2c8f6');
   stroke('#b46b9f');
   strokeWeight(3);
 }
 
-function draw(){
+function draw() {
   if(isDrawing && mouseIsPressed){
     line(mouseX, mouseY, pmouseX, pmouseY);
   }
 }
 
-function mousePressed(){ isDrawing = true; }
-function mouseReleased(){ isDrawing = false; }
+function mousePressed() { isDrawing = true; }
+function mouseReleased() { isDrawing = false; }
 
-function windowResized(){
+function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
 </script>
 
 </body>
