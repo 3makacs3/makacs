@@ -171,7 +171,7 @@ document.getElementById('contact').onclick = () => {
 
       <a href="https://instagram.com/111karmakamra" target="_blank">
         <img src="${GITHUB_BASE}instagram.png"
-          style="width:180px; cursor:pointer; transition:transform 0.2s ease;"
+          style="width:200px; cursor:pointer; transition:transform 0.2s ease;"
           onmouseover="this.style.transform='scale(1.2)'"
           onmouseout="this.style.transform='scale(1)'">
       </a>
@@ -193,11 +193,14 @@ document.getElementById('contact').onclick = () => {
 // ABOUT ME
 document.querySelectorAll('.menu-item')[0].onclick = () => {
   const page = document.createElement('div');
-  page.className = 'art-page';
+  page.className = 'about-page';
 
   page.innerHTML = `
-    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-    <h1>ABOUT ME</h1>
+    <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
+    <img src="${GITHUB_BASE}DSC07013.JPG">
+    <div class="about-text">
+      THIS IS WHERE I CAME FROM!
+    </div>
   `;
 
   document.body.appendChild(page);
