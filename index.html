@@ -190,23 +190,37 @@ document.getElementById('contact').onclick = () => {
   page.style.display = 'block';
 };
 
-// 🔥 ABOUT ME (ÚJ)
-document.querySelectorAll('.menu-item')[0].onclick = () => {
-document.querySelectorAll('.menu-item')[0].onclick = () => {
-  const page = document.createElement('div');
-  page.className = 'about-page';
+// 🔥 ABOUT ME (STABIL VERZIÓ)
+document.getElementById('menu').addEventListener('click', (e) => {
+  if (e.target && e.target.classList.contains('menu-item')) {
+    
+    // csak az első menu-item = ABOUT ME
+    if (e.target.innerText === "about me") {
 
-  page.innerHTML = `
-    <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
-    <img src="${GITHUB_BASE}DSC07013.JPG">
-    <div class="about-text">
-      THIS IS WHERE I CAME FROM!
-    </div>
-  `;
+      const page = document.createElement('div');
+      page.className = 'about-page';
 
-  document.body.appendChild(page);
-};
+      page.innerHTML = `
+        <div class="floating-back" style="color:white; cursor:pointer;">
+          ← back
+        </div>
 
+        <img src="${GITHUB_BASE}DSC07013.JPG">
+
+        <div class="about-text">
+          THIS IS WHERE I CAME FROM!
+        </div>
+      `;
+
+      document.body.appendChild(page);
+
+      // BACK gomb működés (biztonságos, nem törik el)
+      page.querySelector('.floating-back').onclick = () => {
+        page.remove();
+      };
+    }
+  }
+});
   document.body.appendChild(page);
 };
     const rect = el.getBoundingClientRect();
