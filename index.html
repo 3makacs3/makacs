@@ -8,22 +8,8 @@
 <link href="https://fonts.cdnfonts.com/css/baskerville-etext" rel="stylesheet">
 
 <style>
-body {
-  margin:0;
-  padding:0;
-  height:100vh;
-  background-color:#c2c8f6;
-  font-family:'Baskerville eText', Times, serif;
-  overflow:hidden;
-}
-
-canvas {
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:1;
-  pointer-events:none;
-}
+body { margin:0; padding:0; height:100vh; background-color:#c2c8f6; font-family: 'Baskerville eText', Times, serif; overflow:hidden; }
+canvas { position:absolute; top:0; left:0; z-index:1; pointer-events: none; }
 
 h1#makacs, #menu, .art-page {
   z-index:2;
@@ -37,13 +23,21 @@ h1#makacs, #menu, .art-page {
 .art-item {
   position:absolute;
   z-index:2;
+  color:#772469;
+  margin:0;
   font-size:2vw;
+  text-transform: lowercase;
   cursor:pointer;
-  animation:pulse 2s infinite ease-in-out;
+  animation: pulse 2s infinite ease-in-out;
+  transition: transform 0.2s ease;
+}
+
+.art-item:hover {
+  transform: scale(1.2);
 }
 
 .art-item.aggressive {
-  animation:aggressivePulse 1s infinite ease-in-out;
+  animation: aggressivePulse 1s infinite ease-in-out;
 }
 
 @keyframes pulse {
@@ -62,21 +56,24 @@ h1#makacs {
   top:40%;
   font-size:10vw;
   cursor:pointer;
+  transition: transform 0.2s ease;
 }
-h1#makacs:hover { transform:scale(1.2); }
+h1#makacs:hover { transform: scale(1.2); }
 
 #menu {
   display:none;
   top:50%;
-  transform:translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .menu-item {
   font-size:3vw;
   margin:20px 0;
+  text-transform: lowercase;
   cursor:pointer;
+  transition: transform 0.2s ease;
 }
-.menu-item:hover { transform:scale(1.2); }
+.menu-item:hover { transform: scale(1.2); }
 
 .floating-back {
   position:fixed;
@@ -84,39 +81,27 @@ h1#makacs:hover { transform:scale(1.2); }
   left:30px;
   font-size:3vw;
   cursor:pointer;
-  z-index:10;
+  z-index:5;
+  transition: transform 0.2s ease;
 }
+.floating-back:hover { transform: scale(1.2); }
 
 .art-page {
   display:none;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:#c2c8f6;
+  top:0; left:0;
+  width:100%; height:100%;
+  background-color:#c2c8f6;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  flex-direction: column;
   overflow-y:auto;
   padding:50px;
   box-sizing:border-box;
 }
 
-.media {
-  margin-bottom:60px;
-}
-
-.media p {
-  font-size:1.5vw;
-}
-
-.contact-icon {
-  width:120px;
-  margin:20px;
-  cursor:pointer;
-  transition:transform 0.2s ease;
-}
-
-.contact-icon:hover {
-  transform:scale(1.2);
-}
+.media { margin-bottom:60px; }
+.media p { margin-top:10px; font-size:1.5vw; }
 
 /* ABOUT */
 .about-page {
@@ -125,8 +110,8 @@ h1#makacs:hover { transform:scale(1.2); }
   left:0;
   width:100%;
   height:100%;
+  z-index:10;
   background:black;
-  z-index:20;
 }
 
 .about-page img {
@@ -139,12 +124,25 @@ h1#makacs:hover { transform:scale(1.2); }
   position:absolute;
   top:50%;
   left:50%;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%, -50%);
   color:white;
   font-size:5vw;
+  text-align:center;
+  pointer-events:none;
+}
+
+/* CONTACT ICONS */
+.contact-icon {
+  width:120px;
+  margin:20px;
+  cursor:pointer;
+  transition: transform 0.2s ease;
+}
+
+.contact-icon:hover {
+  transform: scale(1.2);
 }
 </style>
-
 </head>
 
 <body>
@@ -152,7 +150,7 @@ h1#makacs:hover { transform:scale(1.2); }
 <h1 id="makacs">Makacs</h1>
 
 <div id="menu">
-  <h1 class="menu-item" id="about">about me</h1>
+  <h1 class="menu-item">about me</h1>
   <h1 class="menu-item" id="my-art">my art</h1>
   <h1 class="menu-item" id="contact">contact</h1>
   <h1 class="menu-item" id="go-back">go back</h1>
@@ -164,46 +162,73 @@ h1#makacs:hover { transform:scale(1.2); }
 
 const GITHUB_BASE = "https://3makacs3.github.io/makacs/";
 
-const makacs = document.getElementById("makacs");
-const menu = document.getElementById("menu");
-const artContainer = document.getElementById("art-items-container");
+const makacs = document.getElementById('makacs');
+const menu = document.getElementById('menu');
+const artContainer = document.getElementById('art-items-container');
 
 const artContent = {
-  photos: [],
-  videos: [],
-  paintings: [
-    {type:"img", src:GITHUB_BASE+"helyek1.jpg", title:""},
-    {type:"img", src:GITHUB_BASE+"helyek2.jpg", title:""},
-    {type:"img", src:GITHUB_BASE+"helyek3.jpg", title:"Helyek, amik már voltam.-2025"},
-    {type:"img", src:GITHUB_BASE+"julius22yas.jpg", title:"Zombie with trees-2026"},
-    {type:"img", src:GITHUB_BASE+"zsofikaviszlat.jpg", title:"Zsófika kollab-2026"}
+  'photos': [],
+  'videos': [],
+  'paintings': [
+    {type:'img', src:GITHUB_BASE + 'helyek1.jpg', title:''},
+    {type:'img', src:GITHUB_BASE + 'helyek2.jpg', title:''},
+    {type:'img', src:GITHUB_BASE + 'helyek3.jpg', title:'Helyek, amik már voltam.-2025'},
+    {type:'img', src:GITHUB_BASE + 'julius22yas.jpg', title:'Zombie with trees-2026'},
+    {type:'img', src:GITHUB_BASE + 'zsofikaviszlat.jpg', title:'Zsófika kollab-2026'}
   ],
-  "makacs archive": [],
-  "everythingelseyoushouldcareabout!": [
-    {type:"img", src:GITHUB_BASE+"tablo.jpg", title:"VAD-2025"}
-  ]
+  'makacs archive': [],
+  'everythingelseyoushouldcareabout!': [
+    {type:'img', src:GITHUB_BASE + 'tablo.jpg', title:'VAD-2025'}
+  ],
 };
 
-// MAKACS → MENU
+// MAKACS
 makacs.onclick = () => {
-  makacs.style.display = "none";
-  menu.style.display = "block";
+  makacs.style.display = 'none';
+  menu.style.display = 'block';
 };
 
 // GO BACK
-document.getElementById("go-back").onclick = () => {
-  menu.style.display = "none";
+document.getElementById('go-back').onclick = () => {
+  menu.style.display = 'none';
   artContainer.innerHTML = "";
-  makacs.style.display = "block";
+  makacs.style.display = 'block';
+};
+
+// CONTACT (FIXED)
+document.getElementById('contact').onclick = () => {
+  const page = document.createElement('div');
+  page.className = 'art-page';
+
+  page.innerHTML = `
+    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+
+    <h1 style="font-size:4vw;">contact</h1>
+
+    <div style="text-align:center;">
+
+      <a href="https://instagram.com/111karmakamra" target="_blank">
+        <img class="contact-icon" src="${GITHUB_BASE}insta.png">
+      </a>
+
+      <a href="mailto:varadixlena@gmail.com">
+        <img class="contact-icon" src="${GITHUB_BASE}email.png">
+      </a>
+
+    </div>
+  `;
+
+  document.body.appendChild(page);
+  page.style.display = 'block';
 };
 
 // ABOUT
-document.getElementById("about").onclick = () => {
-  const page = document.createElement("div");
-  page.className = "about-page";
+document.querySelectorAll('.menu-item')[0].onclick = () => {
+  const page = document.createElement('div');
+  page.className = 'about-page';
 
   page.innerHTML = `
-    <div class="floating-back" onclick="this.closest('.about-page').remove()">← back</div>
+    <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
     <img src="${GITHUB_BASE}DSC07013.JPG">
     <div class="about-text">THIS IS WHERE I CAME FROM!</div>
   `;
@@ -211,45 +236,20 @@ document.getElementById("about").onclick = () => {
   document.body.appendChild(page);
 };
 
-// CONTACT
-document.getElementById("contact").onclick = () => {
-  const page = document.createElement("div");
-  page.className = "art-page";
-
-  page.innerHTML = `
-    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-
-    <h1 style="font-size:4vw;">contact</h1>
-
-    <div>
-      <a href="https://instagram.com/111karmakamra" target="_blank">
-        <img class="contact-icon" src="${GITHUB_BASE}instagram.png">
-      </a>
-
-      <a href="mailto:varadixlena@gmail.com">
-        <img class="contact-icon" src="${GITHUB_BASE}email.png">
-      </a>
-    </div>
-  `;
-
-  document.body.appendChild(page);
-  page.style.display = "block";
-};
-
 // ART MENU
-document.getElementById("my-art").onclick = () => {
+document.getElementById('my-art').onclick = () => {
   artContainer.innerHTML = "";
 
   Object.keys(artContent).forEach(text => {
-    const el = document.createElement("h1");
-    el.className = "art-item";
+    const el = document.createElement('h1');
+    el.className = 'art-item';
     el.innerText = text;
 
-    el.style.left = Math.random()*window.innerWidth + "px";
-    el.style.top = Math.random()*window.innerHeight + "px";
+    el.style.left = Math.random() * window.innerWidth + "px";
+    el.style.top = Math.random() * window.innerHeight + "px";
 
-    if(text === "everythingelseyoushouldcareabout!"){
-      el.classList.add("aggressive");
+    if(text === 'everythingelseyoushouldcareabout!'){
+      el.classList.add('aggressive');
     }
 
     el.onclick = () => showArtPage(text);
@@ -259,11 +259,11 @@ document.getElementById("my-art").onclick = () => {
 };
 
 // ART PAGE
-function showArtPage(title){
-  const page = document.createElement("div");
-  page.className = "art-page";
+function showArtPage(title) {
+  const page = document.createElement('div');
+  page.className = 'art-page';
 
-  let html = `
+  let content = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
     <h1 style="font-size:4vw;">${title}</h1>
   `;
@@ -272,26 +272,31 @@ function showArtPage(title){
 
   if(items && items.length){
     items.forEach(i=>{
-      if(i.type==="img"){
-        html += `<div class="media"><img src="${i.src}" style="width:80%"><p>${i.title}</p></div>`;
+      if(i.type === "img"){
+        content += `
+          <div class="media">
+            <img src="${i.src}" style="width:80%">
+            <p>${i.title}</p>
+          </div>
+        `;
       }
     });
   } else {
-    html += `<p>nincs tartalom</p>`;
+    content += `<p>nincs még tartalom</p>`;
   }
 
-  page.innerHTML = html;
+  page.innerHTML = content;
   document.body.appendChild(page);
-  page.style.display = "block";
+  page.style.display = 'block';
 }
 
-// P5 DRAW
+// DRAW
 let isDrawing = false;
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
-  background("#c2c8f6");
-  stroke("#b46b9f");
+  background('#c2c8f6');
+  stroke('#b46b9f');
   strokeWeight(3);
 }
 
@@ -301,8 +306,8 @@ function draw(){
   }
 }
 
-function mousePressed(){isDrawing=true;}
-function mouseReleased(){isDrawing=false;}
+function mousePressed(){ isDrawing = true; }
+function mouseReleased(){ isDrawing = false; }
 
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
