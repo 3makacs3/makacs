@@ -190,28 +190,13 @@ document.getElementById('contact').onclick = () => {
   page.style.display = 'block';
 };
 
-// ABOUT ME
-
-
-// MY ART
-document.getElementById('my-art').onclick = () => {
-  artContainer.innerHTML = "";
-
-  Object.keys(artContent).forEach(text => {
-    const el = document.createElement('h1');
-    el.className = 'art-item';
-    el.innerText = text;
-
-    el.style.visibility = "hidden";
-    artContainer.appendChild(el);
-const aboutBtn = document.querySelector('.menu-item');
-
-aboutBtn.onclick = () => {
+// 🔥 ABOUT ME (ÚJ)
+document.querySelectorAll('.menu-item')[0].onclick = () => {
   const page = document.createElement('div');
   page.className = 'about-page';
 
   page.innerHTML = `
-    <div class="floating-back" style="color:white;" onclick="this.closest('.about-page').remove()">← back</div>
+   <div class="floating-back" style="color:white;" onclick="this.closest('.art-page').remove()">← back</div>
     <img src="${GITHUB_BASE}DSC07013.JPG">
     <div class="about-text">
       THIS IS WHERE I CAME FROM!
