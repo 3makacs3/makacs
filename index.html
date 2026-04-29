@@ -88,6 +88,32 @@ h1#makacs:hover { transform: scale(1.2); }
 
 .media { margin-bottom:60px; }
 .media p { margin-top:10px; font-size:1.5vw; }
+
+/* 🔥 ABOUT PAGE (ÚJ) */
+.about-page {
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  z-index:10;
+  background:black;
+}
+
+.about-page img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.about-text {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  color:white;
+  font-size:5vw;
+  text-align:center;
+  pointer-events:none;
+}
 </style>
 </head>
 
@@ -143,16 +169,14 @@ document.getElementById('go-back').onclick = () => {
   makacs.style.display = 'block';
 };
 
-// 🔥 CONTACT (csak ez az új rész)
+// 🔥 CONTACT
 document.getElementById('contact').onclick = () => {
   const page = document.createElement('div');
   page.className = 'art-page';
 
   page.innerHTML = `
     <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-
     <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
-
     <div style="text-align:center; font-size:2vw; line-height:2;">
       <p>instagram: <a href="https://instagram.com/111karmakamra" target="_blank">@111karmakamra</a></p>
       <p>email: <a href="mailto:varadixlena@gmail.com">varadixlena@gmail.com</a></p>
@@ -161,6 +185,22 @@ document.getElementById('contact').onclick = () => {
 
   document.body.appendChild(page);
   page.style.display = 'block';
+};
+
+// 🔥 ABOUT ME (ÚJ)
+document.querySelectorAll('.menu-item')[0].onclick = () => {
+  const page = document.createElement('div');
+  page.className = 'about-page';
+
+  page.innerHTML = `
+    <div class="floating-back" onclick="this.closest('.about-page').remove()">← back</div>
+    <img src="${GITHUB_BASE}DSC07013.jpg">
+    <div class="about-text">
+      THIS IS WHERE I CAME FROM!
+    </div>
+  `;
+
+  document.body.appendChild(page);
 };
 
 // My Art → random art címek
