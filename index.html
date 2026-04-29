@@ -182,16 +182,19 @@ document.getElementById('contact').onclick = () => {
     <div style="text-align:center;">
 
       <a href="https://instagram.com/111karmakamra" target="_blank">
-        <img class="contact-icon" src="${GITHUB_BASE}insta.png" alt="instagram">
+        <img class="contact-icon" src="${GITHUB_BASE}instagram.png">
       </a>
 
       <a href="mailto:varadixlena@gmail.com">
-        <img class="contact-icon" src="${GITHUB_BASE}email.png" alt="email">
+        <img class="contact-icon" src="${GITHUB_BASE}email.png">
       </a>
 
     </div>
   `;
 
+  document.body.appendChild(page);
+  page.style.display = 'block';
+};
   document.body.appendChild(page);
   page.style.display = 'block';
 };
