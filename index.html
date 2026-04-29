@@ -175,13 +175,23 @@ document.getElementById('contact').onclick = () => {
   page.className = 'art-page';
 
   page.innerHTML = `
-    <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
-    <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
-    <div style="text-align:center; font-size:2vw; line-height:2;">
-      <p>instagram: <a href="https://instagram.com/111karmakamra" target="_blank">@111karmakamra</a></p>
-      <p>email: <a href="mailto:varadixlena@gmail.com">varadixlena@gmail.com</a></p>
-    </div>
-  `;
+    page.innerHTML = `
+  <div class="floating-back" onclick="this.closest('.art-page').remove()">← back</div>
+
+  <h1 style="font-size:4vw; text-align:center; margin-bottom:50px;">contact</h1>
+
+  <div style="text-align:center;">
+
+    <a href="https://instagram.com/111karmakamra" target="_blank">
+      <img class="contact-icon" src="${GITHUB_BASE}instagram.png" alt="instagram">
+    </a>
+
+    <a href="mailto:varadixlena@gmail.com">
+      <img class="contact-icon" src="${GITHUB_BASE}email.png" alt="email">
+    </a>
+
+  </div>
+`;
 
   document.body.appendChild(page);
   page.style.display = 'block';
